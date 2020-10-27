@@ -40,4 +40,3 @@ yarn android
 
 ## 项目截图
 
-![sample](https://gitee.com/AlanLee97/assert/raw/master/note_images/sample.png)
