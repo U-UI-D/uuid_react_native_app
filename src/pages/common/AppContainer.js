@@ -42,7 +42,6 @@ const tabScreens = [
 ];
 
 export default function AppContainer() {
-
   return (
       <Tabbar tabScreens={tabScreens} />
   );

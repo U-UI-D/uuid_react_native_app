@@ -1,5 +1,6 @@
 import React from "react";
-import {View, Text} from 'react-native'
+import {View, Text} from 'react-native';
+import styles from '../../style/styles';
 
 class AboutPage extends React.Component{
 
@@ -14,7 +15,7 @@ class AboutPage extends React.Component{
   // 渲染函数
   render() {
     return (
-        <View style={localStyle.flexCenter}>
+        <View style={styles.alFlexCenter}>
           <Text style={localStyle.textColorBlue}>关于页面</Text>
           <Text style={localStyle.textColorBlue}>id: {this.props.route.params === undefined ? "" : this.props.route.params.id}</Text>
         </View>

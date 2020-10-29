@@ -60,7 +60,8 @@ class IndexPage extends React.Component {
 
   // 请求作品列表数据
   getMockData = () => {
-    let url = React.mockPath + '/home_work_list.json';
+    // let url = React.mockPath + '/home_work_list.json';
+    let url = "https://gitee.com/AlanLee97/dev-mock/raw/master/project/uuid-react-native-app/work/ui-work-list.json";
 
     request({
       url: url,
@@ -69,7 +70,7 @@ class IndexPage extends React.Component {
     }).then(res => {
       // console.log(res.data.data);
       this.setState({
-        workList: res.data.data,
+        workList: res.data.data.list,
       });
       // console.log(this.state.workList);
     }).catch(err => {

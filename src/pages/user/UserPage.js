@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import {View, Text, ScrollView, StyleSheet, Dimensions, ToastAndroid} from 'react-native';
 import styles from '../../style/styles';
 import CountBox from './component/CountBox';
 import IconTextBox from './component/IconTextBox';
@@ -7,6 +7,9 @@ import ShowWorkBox from './component/ShowWorkBox';
 import ALDivider from '../../components/al-components/al-divider/ALDivider';
 import {request} from '../../utils/network/AxiosRequest';
 import AvatarNickname from '../../components/common/avatar-nickname/AvatarNickname';
+import storage from '../../storage/storage';
+import {Button} from '@ant-design/react-native';
+import {PATH_LOGIN_PAGE, PATH_REGISTER_PAGE} from '../../router/RouterConst';
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
@@ -112,85 +115,115 @@ class UserPage extends React.Component {
           comment: 362,
         },
       ],
+      isLogin: false,
     };
   }
 
   // 渲染函数
   render() {
-    const {userInfo, countData, iconTextData, workData} = this.state;
-    if (userInfo == null) {
-      return <View style={styles.alFlexCenter}><Text>无数据</Text></View>;
+    const {userInfo, countData, iconTextData, workData, isLogin} = this.state;
+
+    if (!isLogin) {
+      return (
+        <View style={[styles.alFlexCenter, styles.alFlexRow, styles.alFlexSpaceEvenly]}>
+          <Button onPress={() => {
+            this.props.navigation.push(PATH_LOGIN_PAGE);
+          }}>登录</Button>
+          <Button onPress={() => {
+            this.props.navigation.push(PATH_REGISTER_PAGE);
+          }}>注册</Button>
+        </View>
+      );
     } else {
       return (
-        <ScrollView style={{
-          backgroundColor: '#fff',
-          paddingTop: 30,
-        }}>
-          {/*用户名和昵称*/}
-          <AvatarNickname
-            avatar={userInfo.avatar}
-            text1={userInfo.nickname}
-            text2={userInfo.sign}
-            padding={20} />
+        userInfo === null ?
+          (
+            <View style={styles.alFlexCenter}><Text>无数据</Text></View>
+          )
+          :
+          <ScrollView style={{
+            backgroundColor: '#fff',
+            paddingTop: 30,
+          }}>
+            {/*用户名和昵称*/}
+            <AvatarNickname
+              avatar={userInfo.avatar}
+              text1={userInfo.nickname}
+              text2={userInfo.sign}
+              padding={20}/>
 
-          {/*统计数据*/}
-          <View style={[localStyle.countBoxStyle]}>
-            {
-              countData.map((item, index) => {
-                return <CountBox key={item.text}
-                                 count={item.count}
-                                 text={item.text}/>;
-              })
-            }
-          </View>
+            <Button onPress={() => {
 
-          {/*收藏、评论、点赞*/}
-          <View style={[localStyle.countBoxStyle]}>
-            {
-              iconTextData.map((item, index) => {
-                return <IconTextBox key={item.text} icon={item.icon} text={item.text}/>;
-              })
-            }
-          </View>
+              storage.save({key: 'loginState', data: false})
+                .then(res => {
+                  console.log('userpage logout res', res);
+                }).catch(err => {
+                ToastAndroid.show('退出失败');
+              });
 
-          {/*分割线*/}
-          <View style={styles.alMarginBottom20}>
-            <ALDivider/>
-          </View>
+              this.setState({
+                isLogin: false,
+              });
+            }}>退出登录</Button>
 
-          {/*tab标题栏*/}
-          <View style={styles.alMarginLR20}>
-            <View style={[styles.alFlexRow, styles.alFlexSpaceBetween]}>
-              <View style={[styles.alFlexRow]}>
-                <Text style={styles.alTextH4}>作品</Text>
-                <View style={{width: 20}}></View>
-                <Text style={[styles.alTextH4, localStyle.colorGray]}>经验</Text>
-                <View style={{width: 20}}></View>
-                <Text style={[styles.alTextH4, localStyle.colorGray]}>灵感</Text>
-              </View>
+            {/*统计数据*/}
+            <View style={[localStyle.countBoxStyle]}>
+              {
+                countData.map((item, index) => {
+                  return <CountBox key={item.text}
+                                   count={item.count}
+                                   text={item.text}/>;
+                })
+              }
+            </View>
 
-              <View>
-                <Text style={styles.alTextDesc}>18个</Text>
+            {/*收藏、评论、点赞*/}
+            <View style={[localStyle.countBoxStyle]}>
+              {
+                iconTextData.map((item, index) => {
+                  return <IconTextBox key={item.text} icon={item.icon} text={item.text}/>;
+                })
+              }
+            </View>
+
+            {/*分割线*/}
+            <View style={styles.alMarginBottom20}>
+              <ALDivider/>
+            </View>
+
+            {/*tab标题栏*/}
+            <View style={styles.alMarginLR20}>
+              <View style={[styles.alFlexRow, styles.alFlexSpaceBetween]}>
+                <View style={[styles.alFlexRow]}>
+                  <Text style={styles.alTextH4}>作品</Text>
+                  <View style={{width: 20}}></View>
+                  <Text style={[styles.alTextH4, localStyle.colorGray]}>经验</Text>
+                  <View style={{width: 20}}></View>
+                  <Text style={[styles.alTextH4, localStyle.colorGray]}>灵感</Text>
+                </View>
+
+                <View>
+                  <Text style={styles.alTextDesc}>18个</Text>
+                </View>
               </View>
             </View>
-          </View>
 
-          {/*作品列表*/}
-          <View style={[styles.alFlexRow, styles.alFlexWrap, styles.alPadding20, styles.alFlexSpaceBetween]}>
-            {
-              workData.map((item, index) => {
-                return <View key={item.title} style={[styles.alMarginBottom25]}>
-                  <ShowWorkBox
-                    width={screenWidth / 2.4}
-                    url={item.url}
-                    title={item.title}
-                    like={item.like}
-                    comment={item.comment}/>
-                </View>;
-              })
-            }
-          </View>
-        </ScrollView>
+            {/*作品列表*/}
+            <View style={[styles.alFlexRow, styles.alFlexWrap, styles.alPadding20, styles.alFlexSpaceBetween]}>
+              {
+                workData.map((item, index) => {
+                  return <View key={item.title} style={[styles.alMarginBottom25]}>
+                    <ShowWorkBox
+                      width={screenWidth / 2.4}
+                      url={item.url}
+                      title={item.title}
+                      like={item.like}
+                      comment={item.comment}/>
+                  </View>;
+                })
+              }
+            </View>
+          </ScrollView>
       );
     }
 
@@ -200,6 +233,17 @@ class UserPage extends React.Component {
   //组件已挂载
   componentDidMount() {
     this.getMockData();
+
+    storage.load({
+      key: 'loginState',
+    }).then(res => {
+      console.log('userpage load succ', res);
+      if (res) {
+        this.setState({isLogin: true});
+      }
+    }).catch(err => {
+      console.log('userpage load fail', err);
+    });
 
   }
 
@@ -218,8 +262,8 @@ class UserPage extends React.Component {
     }).then(res => {
       console.log(res.data);
       this.setState({
-        userInfo: res.data.data
-      })
+        userInfo: res.data.data,
+      });
     }).catch(err => {
       console.log(err);
     });

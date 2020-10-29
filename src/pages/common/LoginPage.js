@@ -1,8 +1,10 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, Keyboard, ScrollView, KeyboardAvoidingView} from 'react-native';
+import {View, Text, Image, StyleSheet, Keyboard, ScrollView, KeyboardAvoidingView, ToastAndroid} from 'react-native';
 import styles from '../../style/styles';
 import LinearGradient from "react-native-linear-gradient";
 import {ALDivider, ALInput} from '../../components/al-components/ALComponent';
+import storage from '../../storage/storage';
+import {PATH_APP_CONTAINER} from '../../router/RouterConst';
 
 class LoginPage extends React.Component {
 
@@ -114,11 +116,17 @@ class LoginPage extends React.Component {
                   }} onPress={() => {
                     console.log(this.state.username);
                     console.log(this.state.password);
-                    if (this.state.username === 'alanlee' && this.state.password === '123456'){
-                      nav.goBack();
+                    if (this.state.username === '1' && this.state.password === '1'){
+                      storage.save({key:"loginState", data:true}).then(res => {
+                        console.log("loginpage save succ");
+                        console.log("loginpage login succ");
+                        nav.push(PATH_APP_CONTAINER);
+                      }).catch(err => {
+                        console.log("save fail");
+                      })
                     }else {
                       console.log("帐号密码错误");
-                      React.showPositionToast("帐号密码错误");
+                      ToastAndroid.show("帐号密码错误")
                     }
                   }}>登录</Text>
                 </LinearGradient>
