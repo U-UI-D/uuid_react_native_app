@@ -4,6 +4,8 @@ import DemoPage from '../pages/demo/DemoPage';
 import AppContainer from '../pages/common/AppContainer';
 import WorkDetailPage from '../pages/work/detail/WorkDetailPage';
 import UserPage from '../pages/user/UserPage';
+import LoginPage from '../pages/common/LoginPage';
+import RegisterPage from '../pages/common/RegisterPage';
 
 
 const routes = [
@@ -49,6 +51,20 @@ const routes = [
   {
     name: 'WorkDetailPage',
     component: WorkDetailPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'LoginPage',
+    component: LoginPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'RegisterPage',
+    component: RegisterPage,
     options: {
       header: () => null,
     }
