@@ -23,7 +23,7 @@ class AvatarNickname extends React.Component{
             padding: this.props.padding ?? 0,
             margin: this.props.margin ?? 0,
           }}>
-            <ALImage url={this.props.avatar} round={true} width={50} height={50} />
+            <ALImage src={this.props.avatar} round={true} width={50} height={50} />
             <View style={{width: 10}}></View>
             <View style={[localStyle.flexCenterVertical]}>
               <Text style={styles.alTextH3}>{this.props.text1}</Text>
