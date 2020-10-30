@@ -4,7 +4,6 @@ import {
   Text,
   Platform
 } from 'react-native';
-
 import RouterView from './src/router/RouterView';
 
 

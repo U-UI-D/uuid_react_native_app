@@ -4,6 +4,8 @@ import DemoPage from '../demo/DemoPage';
 import AboutPage from '../about/AboutPage';
 import Tabbar from '../../components/common/tabbar/Tabbar';
 import UserPage from '../user/UserPage';
+import {Provider} from 'react-redux';
+import store from '../../store';
 
 
 const tabScreens = [
@@ -43,7 +45,9 @@ const tabScreens = [
 
 export default function AppContainer() {
   return (
-      <Tabbar tabScreens={tabScreens} />
+      <Provider store={store}>
+        <Tabbar tabScreens={tabScreens} />
+      </Provider>
   );
 }
 

@@ -1,6 +1,7 @@
 import React from "react";
 import {View, Text} from 'react-native';
 import styles from '../../style/styles';
+import {connect} from 'react-redux';
 
 class AboutPage extends React.Component{
 
@@ -18,6 +19,7 @@ class AboutPage extends React.Component{
         <View style={styles.alFlexCenter}>
           <Text style={localStyle.textColorBlue}>关于页面</Text>
           <Text style={localStyle.textColorBlue}>id: {this.props.route.params === undefined ? "" : this.props.route.params.id}</Text>
+          <Text>{this.props.name}</Text>
         </View>
     );
   }
@@ -35,8 +37,27 @@ class AboutPage extends React.Component{
 
 }
 
+const mapStateToProps = (state) => {
+  return {
+    isLogin: state.isLogin,
+    name: state.name
+  }
+}
 
-export default AboutPage;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateLoginState(data){
+      let action = {
+        type: "updateLoginState",
+        value: data
+      }
+      dispatch(action);
+    }
+  }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AboutPage);
 
 // 样式
 const localStyle = {
