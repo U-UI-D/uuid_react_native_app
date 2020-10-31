@@ -1,17 +1,14 @@
 import React from 'react';
-import {View, Text, StyleSheet, ToastAndroid, ScrollView} from 'react-native';
-import ALPageContainer from '../../../components/al-components/al-page-container/ALPageContainer';
+import {View, Text, StyleSheet} from 'react-native';
+import ALPageContainer from '../../../../components/al-components/al-page-container/ALPageContainer';
 import {Button, Flex, List, WingBlank} from '@ant-design/react-native';
-import ALText from '../../../components/al-components/al-text/ALText';
-import styles from '../../../style/styles';
+import ALText from '../../../../components/al-components/al-text/ALText';
+import styles from '../../../../style/styles';
 import {Icon} from 'beeshell';
-import StorageUtils from '../../../utils/StorageUtils';
-import storage from '../../../storage/storage';
 import {connect} from 'react-redux';
-import {PATH_APP_CONTAINER} from '../../../router/RouterConst';
-import Actions from '../../../store/actions';
-import {ALDivider} from '../../../components/al-components/ALComponent';
-import ALListItem from '../../../components/al-components/al-list/al-list-item/ALListItem';
+import RouteConst from '../../../../router/RouteConst';
+import Actions from '../../../../store/actions';
+import ALListItem from '../../../../components/al-components/al-list/al-list-item/ALListItem';
 
 class UserSettingPage extends React.Component {
 
@@ -45,11 +42,17 @@ class UserSettingPage extends React.Component {
           <View>
 
             <ALListItem
+              onPress={() => {
+                this.props.navigation.navigate(RouteConst.USER_PROFILE_PAGE);
+              }}
               renderLeft={
                 <ALText hNum={4}>个人信息</ALText>
               } centerText={''} rightText={''}/>
 
             <ALListItem
+              onPress={() => {
+                this.props.navigation.navigate(RouteConst.ABOUT_PAGE)
+              }}
               renderLeft={
                 <ALText hNum={4}>关于</ALText>
               } centerText={''} rightText={''}/>
@@ -59,7 +62,7 @@ class UserSettingPage extends React.Component {
             <Button type="warning" onPress={() => {
               this.props.updateLoginState(false);
               this.props.updateUserInfo(null);
-              this.props.navigation.navigate(PATH_APP_CONTAINER);
+              this.props.navigation.navigate(RouteConst.APP_CONTAINER);
             }}>退出登录</Button>
           </View>
 
