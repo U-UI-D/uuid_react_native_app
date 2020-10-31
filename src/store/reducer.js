@@ -1,3 +1,4 @@
+import Actions from './actions';
 
 let initState = {
   userInfo: null,
@@ -11,12 +12,12 @@ export function reducer(state = initState, action) {
 
   let newState = JSON.parse(JSON.stringify(state));
 
-  if (action.type === 'updateUserInfo') {
+  if (action.type === Actions.UPDATE_USERINFO) {
     newState.userInfo = action.value;
     console.log('newState', newState);
   }
 
-  if (action.type === 'updateLoginState') {
+  if (action.type === Actions.UPDATE_LOGIN_STATE) {
     newState.isLogin = action.value;
     console.log('newState', newState);
   }
