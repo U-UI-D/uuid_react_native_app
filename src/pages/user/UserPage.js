@@ -6,20 +6,16 @@ import IconTextBox from './component/IconTextBox';
 import ShowWorkBox from './component/ShowWorkBox';
 import ALDivider from '../../components/al-components/al-divider/ALDivider';
 import {request} from '../../utils/network/AxiosRequest';
-import AvatarNickname from '../../components/common/avatar-nickname/AvatarNickname';
-import storage from '../../storage/storage';
 import {Button, Flex, WhiteSpace, WingBlank} from '@ant-design/react-native';
-import {
-  PATH_LOGIN_PAGE,
-  PATH_REGISTER_PAGE,
-  PATH_USER_PROFILE_PAGE,
-  PATH_USER_SETTING_PAGE,
-} from '../../router/RouterConst';
+import RouteConst from '../../router/RouteConst';
 import {connect} from 'react-redux';
-import {ALImage} from '../../components/al-components/ALComponent';
+import {ALImage, ALPlaceView} from '../../components/al-components/ALComponent';
 import ScreenUtils from '../../utils/ScreenUtils';
 import ALText from '../../components/al-components/al-text/ALText';
 import {Icon, Button as MTButton} from 'beeshell';
+import ALTabs from '../../components/al-components/al-tabs/ALTabs';
+import SwipeTab1 from './component/SwipeTab1';
+import SwipeTab2 from './component/SwipeTab2';
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
@@ -138,17 +134,25 @@ class UserPage extends React.Component {
     const unLoginView = (
       <View style={[styles.alFlexCenter, styles.alFlexRow, styles.alFlexSpaceEvenly]}>
         <Button onPress={() => {
-          this.props.navigation.push(PATH_LOGIN_PAGE);
+          this.props.navigation.push(RouteConst.LOGIN_PAGE);
         }}>登录</Button>
         <Button onPress={() => {
-          this.props.navigation.push(PATH_REGISTER_PAGE);
+          this.props.navigation.push(RouteConst.REGISTER_PAGE);
         }}>注册</Button>
-
-        <Text onPress={() => {
-          this.props.navigation.navigate(PATH_USER_SETTING_PAGE);
-        }}>设置</Text>
       </View>
     );
+
+    const tabs = [
+      {key: 'tab1', title: '作品'},
+      {key: 'tab2', title: '收藏'},
+      {key: 'tab3', title: '点赞'},
+    ];
+
+    const sceneMap = {
+      tab1: () => <SwipeTab1 {...this.props} />,
+      tab2: () => <SwipeTab2 {...this.props} />,
+      tab3: () => <SwipeTab2 {...this.props} />,
+    };
 
     if (!isLogin) {
       return unLoginView;
@@ -172,7 +176,7 @@ class UserPage extends React.Component {
               <Flex style={[styles.alPadding20]} justify="between">
                 <Text></Text>
                 <Text onPress={() => {
-                  this.props.navigation.navigate(PATH_USER_SETTING_PAGE);
+                  this.props.navigation.navigate(RouteConst.USER_SETTING_PAGE);
                 }} style={{color: '#fff'}}>设置</Text>
               </Flex>
             </View>
@@ -190,7 +194,7 @@ class UserPage extends React.Component {
                     </Flex>
                   </Flex.Item>
                   <Button style={{borderWidth: 0}} type="ghost" onPress={() => {
-                    this.props.navigation.navigate(PATH_USER_PROFILE_PAGE)
+                    this.props.navigation.navigate(RouteConst.USER_PROFILE_PAGE)
                   }}>
                     <Icon source={require('beeshell/dist/common/images/icons/angle-right.png')}
                           size={14}
@@ -225,40 +229,16 @@ class UserPage extends React.Component {
               <ALDivider/>
             </View>
 
-
             {/*tab标题栏*/}
-            <View style={styles.alMarginLR20}>
-              <View style={[styles.alFlexRow, styles.alFlexSpaceBetween]}>
-                <View style={[styles.alFlexRow]}>
-                  <Text style={styles.alTextH4}>作品</Text>
-                  <View style={{width: 20}}></View>
-                  <Text style={[styles.alTextH4, localStyle.colorGray]}>经验</Text>
-                  <View style={{width: 20}}></View>
-                  <Text style={[styles.alTextH4, localStyle.colorGray]}>灵感</Text>
-                </View>
+            <View style={{width: ScreenUtils.getScreenWidth()}}>
+              <ALTabs
+                tabs={tabs}
+                sceneMap={sceneMap}
+                tabBarStyle={localStyle.tabBarStyle} />
 
-                <View>
-                  <Text style={styles.alTextDesc}>18个</Text>
-                </View>
-              </View>
             </View>
 
 
-            {/*作品列表*/}
-            <View style={[styles.alFlexRow, styles.alFlexWrap, styles.alPadding20, styles.alFlexSpaceBetween]}>
-              {
-                workData.map((item, index) => {
-                  return <View key={item.title} style={[styles.alMarginBottom25]}>
-                    <ShowWorkBox
-                      width={screenWidth / 2.4}
-                      url={item.url}
-                      title={item.title}
-                      like={item.like}
-                      comment={item.comment}/>
-                  </View>;
-                })
-              }
-            </View>
           </ScrollView>
       );
     }
@@ -312,6 +292,10 @@ const localStyle = StyleSheet.create({
   colorGray: {
     color: '#999',
   },
+
+  tabBarStyle:{
+    backgroundColor: "#00000000"
+  }
 });
 
 
