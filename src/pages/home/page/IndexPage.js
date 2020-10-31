@@ -4,7 +4,7 @@ import ShowWorkBox from '../component/ShowWorkBox';
 import styles from '../../../style/styles';
 import ALPlaceView from '../../../components/al-components/al-place-view/ALPlaceView';
 import {request} from '../../../utils/network/AxiosRequest';
-import {PATH_WORK_DETAIL_PAGE} from '../../../router/RouterConst';
+import RouteConst from '../../../router/RouteConst';
 import {TouchableItem} from 'react-native-tab-view';
 
 class IndexPage extends React.Component {
@@ -30,7 +30,7 @@ class IndexPage extends React.Component {
             return (
               <TouchableItem key={item.title}
                              onPress={() => {
-                               this.props.navigation.push(PATH_WORK_DETAIL_PAGE, {workData: item});
+                               this.props.navigation.push(RouteConst.WORK_DETAIL_PAGE, {workData: item});
                              }} >
                 <ShowWorkBox navigation={nav} data={item}/>
               </TouchableItem>

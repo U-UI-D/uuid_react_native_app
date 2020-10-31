@@ -1,66 +1,87 @@
 import React from 'react';
 import {View} from 'react-native';
 import styles from '../../../style/styles';
+import PropTypes from 'prop-types';
 
-class ALDivider extends React.Component {
+// 渲染函数
+function ALDivider(props) {
+  return (
+    <View>
+      {
+        props.children ? props.children :
+          <View>
+            {
+              props.slotCenter ?
+                (
+                  <View style={[
+                    styles.alFlexRow,
+                    styles.alFlexCenter,
+                    {
+                      marginTop: props.marginTop,
+                      marginBottom: props.marginBottom,
+                      marginLeft: props.marginLeft,
+                      marginRight: props.marginRight,
+                    },
+                  ]}>
+                    <View style={{
+                      flex: 1,
+                      flexDirection: 'column',
+                      height: props.weight,
+                      backgroundColor: props.color,
+                    }}/>
+                    <View style={{flex: 1}}>
+                      {props.slotCenter}
+                    </View>
+                    <View style={{
+                      flex: 1,
+                      height: props.weight,
+                      backgroundColor: props.color,
+                    }}/>
+                  </View>
+                )
+                :
+                (
+                  <View style={{
+                    margin: props.margin,
+                    marginTop: props.marginTop,
+                    marginBottom: props.marginBottom,
+                    marginLeft: props.marginLeft,
+                    marginRight: props.marginRight,
+                    width: props.width,
+                    height: props.weight,
+                    backgroundColor: props.color,
+                  }}/>
+                )
+            }
+          </View>
+      }
+    </View>
 
-  //构造器
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  // 渲染函数
-  render() {
-    return (
-        <View>
-          {
-            this.props.children ? this.props.children :
-                <View>
-                  {
-                    this.props.slotCenter ?
-                        <View style={[styles.alFlexRow, styles.alFlexCenter]}>
-                          <View style={{
-                            flex: 1,
-                            flexDirection: 'column',
-                            height: this.props.weight ?? 0.5,
-                            backgroundColor: this.props.color ?? '#eee',
-                          }}/>
-                          <View style={{flex: 1}}>
-                            {this.props.slotCenter}
-                          </View>
-                          <View style={{
-                            flex: 1,
-                            height: this.props.weight ?? 0.5,
-                            backgroundColor: this.props.color ?? '#eee',
-                          }}/>
-                        </View> :
-                        <View style={{
-                          margin: this.props.margin ?? 0,
-                          width: this.props.width,
-                          height: this.props.weight ?? 0.5,
-                          backgroundColor: this.props.color ?? '#eeeeee'
-                        }}/>
-                  }
-                </View>
-          }
-        </View>
-
-    );
-  }
-
-  // 生命周期函数
-  //组件已挂载
-  componentDidMount() {
-
-  }
-
-  //组件将要卸载时
-  componentWillUnmount() {
-
-  }
-
-
+  );
 }
+
+ALDivider.propTypes = {
+  color: PropTypes.string,
+  weight: PropTypes.number,
+  width: PropTypes.number,
+  margin: PropTypes.number,
+  marginTop: PropTypes.number,
+  marginBottom: PropTypes.number,
+  marginLeft: PropTypes.number,
+  marginRight: PropTypes.number,
+  padding: PropTypes.number,
+  slotCenter: PropTypes.object,
+};
+
+ALDivider.defaultProps = {
+  color: '#eee',
+  weight: 0.5,
+  margin: 0,
+  marginTop: 0,
+  marginBottom: 0,
+  marginLeft: 0,
+  marginRight: 0,
+  padding: 0,
+};
 
 export default ALDivider;

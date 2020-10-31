@@ -26,8 +26,7 @@ const styles = StyleSheet.create({
   },
   alFlexCenterV:{
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
+    alignItems: 'center',
   },
   alFlexCenterH:{
     flex: 1,
@@ -49,8 +48,17 @@ const styles = StyleSheet.create({
   alFlexSpaceBetween:{
     justifyContent: "space-between"
   },
+  alFlexSpaceAround:{
+    justifyContent: "space-around"
+  },
+  alFlexSpaceEvenly:{
+    justifyContent: "space-evenly"
+  },
   alFlexWrap:{
     flexWrap: 'wrap'
+  },
+  alFlexItemStretch: {
+    alignSelf: "stretch"
   },
 
 
@@ -271,23 +279,22 @@ const styles = StyleSheet.create({
 
   alShowBorderRed:{
     borderWidth: 1,
-    borderColor: color.error,
-    borderStyle: 'solid'
+    borderColor: color.error
   },
   alShowBorderBlue:{
     borderWidth: 1,
     borderColor: color.primary,
-    borderStyle: 'solid'
+
   },
   alShowBorderBlack:{
     borderWidth: 1,
     borderColor: 'black',
-    borderStyle: 'solid'
+
   },
   alShowBorderGreen:{
     borderWidth: 1,
     borderColor: color.success,
-    borderStyle: 'solid'
+
   },
 
   alFontSize6: {
@@ -352,7 +359,12 @@ const styles = StyleSheet.create({
 
   alWrapWidth: {
     alignSelf: 'flex-start'
-  }
+  },
+
+  alBorderCapsule: {
+    borderRadius: 999
+  },
+
 
 })
 

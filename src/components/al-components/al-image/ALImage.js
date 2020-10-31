@@ -63,9 +63,9 @@ class ALImage extends React.Component {
         <Image source={src}
                resizeMode={props.fit}
                style={{
-                 width: props.width ?? (iw ? iw : width),
-                 height: props.height ?? (ih ? ih : height),
-                 borderRadius: props.round ? props.width : props.radius,
+                 width: props.size ?? (props.width ?? (iw ? iw : width)),
+                 height: props.size ?? (props.height ?? (ih ? ih : height)),
+                 borderRadius: props.round ? (props.size ?? props.width) : props.radius,
                  ...props.style,
                }}/>
       </View>
@@ -106,6 +106,7 @@ ALImage.propTypes = {
   fit: PropTypes.string,
   round: PropTypes.bool,
   radius: PropTypes.number,
+  size: PropTypes.number,
   style: PropTypes.object,
   className: PropTypes.string,
   onClick: PropTypes.func,

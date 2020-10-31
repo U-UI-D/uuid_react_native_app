@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import {SafeAreaView, Dimensions, StyleSheet,} from 'react-native';
 import {SceneMap, TabView, TabBar} from 'react-native-tab-view';
+import styles from '../../../style/styles';
 const screenWidth = Dimensions.get('window').width;
 
 export default class ALTabs extends PureComponent {
@@ -34,7 +35,7 @@ export default class ALTabs extends PureComponent {
               getLabelText={({route}) => route.title}
               labelStyle={this.props.labelStyle ?? localStyle.labelStyle}
               tabStyle={{height: 44}}
-              indicatorStyle={this.props.borderStyle ?? localStyle.borderStyle}
+              indicatorStyle={this.props.borderStyle ?? [localStyle.borderStyle, {marginLeft: (screenWidth / this.props.tabs.length) / 2 - 10}]}
               activeColor={this.props.activeColor ?? localStyle.activeColor.color}
               inactiveColor={this.props.inactiveColor ?? localStyle.inactiveColor.color}
             />
@@ -53,7 +54,7 @@ export default class ALTabs extends PureComponent {
 
 const localStyle = StyleSheet.create({
   tabBarStyle: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
     shadowColor: '#d4d4d4',
     shadowOffset: {
       width: 0,
@@ -69,7 +70,6 @@ const localStyle = StyleSheet.create({
   borderStyle: {
     backgroundColor: '#409EFF',
     width: 20,
-    marginLeft: (screenWidth / 3) / 2 - 10,
     borderRadius: 10,
     marginBottom: 5,
   },

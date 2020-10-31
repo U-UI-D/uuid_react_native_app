@@ -3,8 +3,7 @@ import {View, Text, Image, StyleSheet, Keyboard, ScrollView, KeyboardAvoidingVie
 import styles from '../../style/styles';
 import LinearGradient from "react-native-linear-gradient";
 import {ALDivider, ALInput} from '../../components/al-components/ALComponent';
-import storage from '../../storage/storage';
-import {PATH_APP_CONTAINER} from '../../router/RouterConst';
+import RouteConst from '../../router/RouteConst';
 import {connect} from 'react-redux';
 import Actions from '../../store/actions';
 
@@ -65,7 +64,7 @@ class LoginPage extends React.Component {
                 <Image style={{
                   width: 80,
                   height: 80,
-                }} source={require('../../assets/image/common/logo.png')}/>
+                }} source={require('../../assets/image/logo.png')}/>
                 <Text style={styles.alTextH1}>欢迎登录</Text>
                 <Text style={[localStyle.colorGray, styles.alMarginTop20]}>专业用户体验设计平台</Text>
                 <Text style={[localStyle.colorGray, styles.alMarginBottom20]}>设计师交流学习聚集地</Text>
@@ -186,7 +185,7 @@ class LoginPage extends React.Component {
     console.log(this.state.password);
     if (this.state.username === '1' && this.state.password === '1'){
       this.props.updateLoginState(true);
-      this.props.navigation.navigate(PATH_APP_CONTAINER);
+      this.props.navigation.navigate(RouteConst.APP_CONTAINER);
     }else {
       console.log("帐号密码错误");
       ToastAndroid.show("帐号密码错误")
