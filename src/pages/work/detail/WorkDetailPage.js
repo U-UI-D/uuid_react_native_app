@@ -9,6 +9,7 @@ import {ALImage} from '../../../components/al-components/ALComponent';
 import ALPageContainer from '../../../components/al-components/al-page-container/ALPageContainer';
 import {WingBlank} from '@ant-design/react-native';
 import ScreenUtils from '../../../utils/ScreenUtils';
+import ALText from '../../../components/al-components/al-text/ALText';
 
 //作品详情页
 class WorkDetailPage extends React.Component{
@@ -114,12 +115,31 @@ class WorkDetailPage extends React.Component{
             <View style={[
               styles.alFlexRow,
               styles.alFlexSpaceBetween,
+              styles.alFlexCenterV,
               styles.alPaddingTB20,
               localStyle.topBar,
-              {width: ScreenUtils.getScreenWidth(), backgroundColor: this.state.offsetTop > 100 ? "#fff" : "#00000000"}
+
+              {
+                backgroundColor: this.state.offsetTop > 100 ? "#fff" : "#00000000",
+
+              }
             ]}>
-              <View><Text onPress={() => {this.props.navigation.goBack()}}>返回</Text></View>
-              <View><Text>分享</Text></View>
+              <Text style={{color: this.state.offsetTop > 100 ? "#000" : "#fff"}}
+                    onPress={() => {this.props.navigation.goBack()}}>
+                返回
+              </Text>
+              {
+                this.state.offsetTop > 100 ?
+                <ALText type={"title"}
+                        hNum={2}
+                        style={{color: this.state.offsetTop > 100 ? "#000" : "#fff"}}>
+                  {workData.title}
+                </ALText> : null
+              }
+              <Text style={{color: this.state.offsetTop > 100 ? "#000" : "#fff"}}
+                    onPress={() => {this.props.navigation.goBack()}}>
+                分享
+              </Text>
             </View>
           </View>
 
@@ -182,7 +202,9 @@ const localStyle = {
     zIndex: 1000,
     paddingLeft: 20,
     paddingRight: 20,
-    paddingTop: 50,
-    backgroundColor: "#fff"
+    paddingTop: 36,
+    backgroundColor: "#fff",
+    color: "#fff",
+    width: ScreenUtils.getScreenWidth(),
   }
 }

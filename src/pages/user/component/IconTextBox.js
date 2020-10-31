@@ -18,8 +18,8 @@ class IconTextBox extends React.Component{
     const props = this.props;
     return (
         <View style={[styles.alFlexCenter, styles.alPadding10, styles.alMargin10]}>
-          <ALImage src={props.icon} width={25} height={25} />
-          <Text>{props.text}</Text>
+          <ALImage src={props.icon} size={36} />
+          <Text style={{fontSize: 12}}>{props.text}</Text>
         </View>
     );
   }

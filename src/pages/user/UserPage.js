@@ -8,8 +8,18 @@ import ALDivider from '../../components/al-components/al-divider/ALDivider';
 import {request} from '../../utils/network/AxiosRequest';
 import AvatarNickname from '../../components/common/avatar-nickname/AvatarNickname';
 import storage from '../../storage/storage';
-import {Button} from '@ant-design/react-native';
-import {PATH_LOGIN_PAGE, PATH_REGISTER_PAGE} from '../../router/RouterConst';
+import {Button, Flex, WhiteSpace, WingBlank} from '@ant-design/react-native';
+import {
+  PATH_LOGIN_PAGE,
+  PATH_REGISTER_PAGE,
+  PATH_USER_PROFILE_PAGE,
+  PATH_USER_SETTING_PAGE,
+} from '../../router/RouterConst';
+import {connect} from 'react-redux';
+import {ALImage} from '../../components/al-components/ALComponent';
+import ScreenUtils from '../../utils/ScreenUtils';
+import ALText from '../../components/al-components/al-text/ALText';
+import {Icon, Button as MTButton} from 'beeshell';
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
@@ -41,75 +51,75 @@ class UserPage extends React.Component {
       ],
       iconTextData: [
         {
-          icon: require('../../assets/icon/my/fenlei.png'),
+          icon: require('../../assets/icon/user/shoucang.png'),
           text: '我收藏的',
         },
         {
-          icon: require('../../assets/icon/my/xinxi.png'),
+          icon: require('../../assets/icon/user/xiaoxi.png'),
           text: '我的评论',
         },
         {
-          icon: require('../../assets/icon/my/dianzan.png'),
+          icon: require('../../assets/icon/user/dianzan.png'),
           text: '点赞',
         },
       ],
       workData: [
         {
-          url: require('../../assets/image/my/poster1.png'),
+          url: require('../../assets/image/user/poster1.png'),
           title: 'UI中国手机客户端原创设计',
           like: 12,
           comment: 32,
         },
         {
-          url: require('../../assets/image/my/poster2.png'),
+          url: require('../../assets/image/user/poster2.png'),
           title: '「汉学」文学工具产品的视觉与体验碰撞',
           like: 43,
           comment: 2432,
         },
         {
-          url: require('../../assets/image/my/poster3.png'),
+          url: require('../../assets/image/user/poster3.png'),
           title: '【顷刻】_视听解说APP',
           like: 123,
           comment: 5452,
         },
         {
-          url: require('../../assets/image/my/poster4.png'),
+          url: require('../../assets/image/user/poster4.png'),
           title: '拼多多APP REDESIGN',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../assets/image/my/poster5.png'),
+          url: require('../../assets/image/user/poster5.png'),
           title: 'Redesign《在外》APP ',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../assets/image/my/poster6.png'),
+          url: require('../../assets/image/user/poster6.png'),
           title: '植物类社交APP概念设计',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../assets/image/my/poster7.png'),
+          url: require('../../assets/image/user/poster7.png'),
           title: '优灵APP改版 - 帮助你发现优秀产品和设计灵感',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../assets/image/my/poster8.png'),
+          url: require('../../assets/image/user/poster8.png'),
           title: '晓知新闻APP',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../assets/image/my/poster9.png'),
+          url: require('../../assets/image/user/poster9.png'),
           title: '微信Redesign（重设计）',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../assets/image/my/poster10.png'),
+          url: require('../../assets/image/user/poster10.png'),
           title: '生活家 - APP视觉设计',
           like: 123,
           comment: 362,
@@ -121,19 +131,27 @@ class UserPage extends React.Component {
 
   // 渲染函数
   render() {
-    const {userInfo, countData, iconTextData, workData, isLogin} = this.state;
+    const {userInfo, countData, iconTextData, workData} = this.state;
+
+    const {isLogin} = this.props;
+
+    const unLoginView = (
+      <View style={[styles.alFlexCenter, styles.alFlexRow, styles.alFlexSpaceEvenly]}>
+        <Button onPress={() => {
+          this.props.navigation.push(PATH_LOGIN_PAGE);
+        }}>登录</Button>
+        <Button onPress={() => {
+          this.props.navigation.push(PATH_REGISTER_PAGE);
+        }}>注册</Button>
+
+        <Text onPress={() => {
+          this.props.navigation.navigate(PATH_USER_SETTING_PAGE);
+        }}>设置</Text>
+      </View>
+    );
 
     if (!isLogin) {
-      return (
-        <View style={[styles.alFlexCenter, styles.alFlexRow, styles.alFlexSpaceEvenly]}>
-          <Button onPress={() => {
-            this.props.navigation.push(PATH_LOGIN_PAGE);
-          }}>登录</Button>
-          <Button onPress={() => {
-            this.props.navigation.push(PATH_REGISTER_PAGE);
-          }}>注册</Button>
-        </View>
-      );
+      return unLoginView;
     } else {
       return (
         userInfo === null ?
@@ -143,28 +161,44 @@ class UserPage extends React.Component {
           :
           <ScrollView style={{
             backgroundColor: '#fff',
-            paddingTop: 30,
+            position: 'relative',
           }}>
-            {/*用户名和昵称*/}
-            <AvatarNickname
-              avatar={userInfo.avatar}
-              text1={userInfo.nickname}
-              text2={userInfo.sign}
-              padding={20}/>
 
-            <Button onPress={() => {
+            <View>
+              <ALImage src={require('../../assets/image/user/bg.jpg')}/>
+            </View>
 
-              storage.save({key: 'loginState', data: false})
-                .then(res => {
-                  console.log('userpage logout res', res);
-                }).catch(err => {
-                ToastAndroid.show('退出失败');
-              });
+            <View style={{position: 'absolute', top: 16, width: ScreenUtils.getScreenWidth()}}>
+              <Flex style={[styles.alPadding20]} justify="between">
+                <Text></Text>
+                <Text onPress={() => {
+                  this.props.navigation.navigate(PATH_USER_SETTING_PAGE);
+                }} style={{color: '#fff'}}>设置</Text>
+              </Flex>
+            </View>
 
-              this.setState({
-                isLogin: false,
-              });
-            }}>退出登录</Button>
+
+            <WingBlank>
+              <View>
+                <Flex style={styles.alPaddingTB20}>
+                  <ALImage round src={userInfo.avatar} size={90}/>
+                  <Flex.Item style={{marginLeft: 20}}>
+                    <Flex direction={'column'} justify={'center'}>
+                      <ALText style={{alignSelf: 'stretch'}} hNum={2}>{userInfo.nickname}</ALText>
+                      <WhiteSpace />
+                      <ALText type={'desc'} style={{alignSelf: 'stretch'}}>{userInfo.sign}</ALText>
+                    </Flex>
+                  </Flex.Item>
+                  <Button style={{borderWidth: 0}} type="ghost" onPress={() => {
+                    this.props.navigation.navigate(PATH_USER_PROFILE_PAGE)
+                  }}>
+                    <Icon source={require('beeshell/dist/common/images/icons/angle-right.png')}
+                          size={14}
+                          tintColor='#bababa'/>
+                  </Button>
+                </Flex>
+              </View>
+            </WingBlank>
 
             {/*统计数据*/}
             <View style={[localStyle.countBoxStyle]}>
@@ -191,6 +225,7 @@ class UserPage extends React.Component {
               <ALDivider/>
             </View>
 
+
             {/*tab标题栏*/}
             <View style={styles.alMarginLR20}>
               <View style={[styles.alFlexRow, styles.alFlexSpaceBetween]}>
@@ -207,6 +242,7 @@ class UserPage extends React.Component {
                 </View>
               </View>
             </View>
+
 
             {/*作品列表*/}
             <View style={[styles.alFlexRow, styles.alFlexWrap, styles.alPadding20, styles.alFlexSpaceBetween]}>
@@ -229,21 +265,11 @@ class UserPage extends React.Component {
 
   }
 
+
   // 生命周期函数
   //组件已挂载
   componentDidMount() {
     this.getMockData();
-
-    storage.load({
-      key: 'loginState',
-    }).then(res => {
-      console.log('userpage load succ', res);
-      if (res) {
-        this.setState({isLogin: true});
-      }
-    }).catch(err => {
-      console.log('userpage load fail', err);
-    });
 
   }
 
@@ -264,6 +290,9 @@ class UserPage extends React.Component {
       this.setState({
         userInfo: res.data.data,
       });
+
+      this.props.updateUserInfo(res.data.data);
+
     }).catch(err => {
       console.log(err);
     });
@@ -285,4 +314,34 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default UserPage;
+
+const mapStateToProps = (state) => {
+  return {
+    isLogin: state.isLogin,
+    name: state.name,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateLoginState(data) {
+      let action = {
+        type: 'updateLoginState',
+        value: data,
+      };
+      dispatch(action);
+    },
+
+    updateUserInfo(data) {
+      let action = {
+        type: 'updateUserInfo',
+        value: data,
+      };
+      dispatch(action);
+    },
+  };
+
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

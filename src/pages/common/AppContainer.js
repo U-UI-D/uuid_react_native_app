@@ -4,8 +4,6 @@ import DemoPage from '../demo/DemoPage';
 import AboutPage from '../about/AboutPage';
 import Tabbar from '../../components/common/tabbar/Tabbar';
 import UserPage from '../user/UserPage';
-import {Provider} from 'react-redux';
-import store from '../../store';
 
 
 const tabScreens = [
@@ -30,8 +28,8 @@ const tabScreens = [
     name: "关于",
     component: AboutPage,
     options: {},
-    icon0: require('../../assets/icon/tabbar/bianji0.png'),
-    icon1: require('../../assets/icon/tabbar/bianji1.png'),
+    icon0: require('../../assets/icon/tabbar/xiaoxi0.png'),
+    icon1: require('../../assets/icon/tabbar/xiaoxi1.png'),
   },
   {
     key: "UserPage",
@@ -45,9 +43,7 @@ const tabScreens = [
 
 export default function AppContainer() {
   return (
-      <Provider store={store}>
-        <Tabbar tabScreens={tabScreens} />
-      </Provider>
+    <Tabbar tabScreens={tabScreens} />
   );
 }
 

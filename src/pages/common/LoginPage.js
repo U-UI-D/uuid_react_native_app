@@ -5,6 +5,8 @@ import LinearGradient from "react-native-linear-gradient";
 import {ALDivider, ALInput} from '../../components/al-components/ALComponent';
 import storage from '../../storage/storage';
 import {PATH_APP_CONTAINER} from '../../router/RouterConst';
+import {connect} from 'react-redux';
+import Actions from '../../store/actions';
 
 class LoginPage extends React.Component {
 
@@ -113,22 +115,7 @@ class LoginPage extends React.Component {
                     textAlign: 'center',
                     color: '#fff',
                     borderRadius: 10,
-                  }} onPress={() => {
-                    console.log(this.state.username);
-                    console.log(this.state.password);
-                    if (this.state.username === '1' && this.state.password === '1'){
-                      storage.save({key:"loginState", data:true}).then(res => {
-                        console.log("loginpage save succ");
-                        console.log("loginpage login succ");
-                        nav.push(PATH_APP_CONTAINER);
-                      }).catch(err => {
-                        console.log("save fail");
-                      })
-                    }else {
-                      console.log("帐号密码错误");
-                      ToastAndroid.show("帐号密码错误")
-                    }
-                  }}>登录</Text>
+                  }} onPress={() => {this.login()}}>登录</Text>
                 </LinearGradient>
               </View>
             </ScrollView>
@@ -194,6 +181,18 @@ class LoginPage extends React.Component {
     state.navigation.navigate(path);
   }
 
+  login = () => {
+    console.log(this.state.username);
+    console.log(this.state.password);
+    if (this.state.username === '1' && this.state.password === '1'){
+      this.props.updateLoginState(true);
+      this.props.navigation.navigate(PATH_APP_CONTAINER);
+    }else {
+      console.log("帐号密码错误");
+      ToastAndroid.show("帐号密码错误")
+    }
+  }
+
 
 }
 
@@ -203,4 +202,25 @@ const localStyle = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+
+const mapStateToProps = (state) => {
+  return {
+    isLogin: state.isLogin,
+    name: state.name
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateLoginState(data){
+      let action = {
+        type: Actions.UPDATE_LOGIN_STATE,
+        value: data
+      }
+      dispatch(action);
+    }
+  }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

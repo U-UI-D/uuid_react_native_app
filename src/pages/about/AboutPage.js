@@ -2,6 +2,7 @@ import React from "react";
 import {View, Text} from 'react-native';
 import styles from '../../style/styles';
 import {connect} from 'react-redux';
+import {Button} from 'beeshell';
 
 class AboutPage extends React.Component{
 
@@ -17,9 +18,12 @@ class AboutPage extends React.Component{
   render() {
     return (
         <View style={styles.alFlexCenter}>
+
           <Text style={localStyle.textColorBlue}>关于页面</Text>
           <Text style={localStyle.textColorBlue}>id: {this.props.route.params === undefined ? "" : this.props.route.params.id}</Text>
           <Text>{this.props.name}</Text>
+
+          <Button type="danger">按钮</Button>
         </View>
     );
   }
