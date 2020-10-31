@@ -30,6 +30,12 @@ export default class RouteConst {
   //用户 -> 个人信息 -> 修改个性签名
   static USER_PROFILE_MODIFY_SIGNATURE_PAGE = 'ModifySignaturePage';
 
+  //用户 -> 个人信息 -> 修改手机号
+  static USER_PROFILE_MODIFY_PHONE_PAGE = 'ModifyPhonePage';
+
+  //用户 -> 个人信息 -> 修改密码
+  static USER_PROFILE_MODIFY_PASSWORD_PAGE = 'ModifyPasswordPage';
+
   //登录页面
   static LOGIN_PAGE = 'LoginPage';
 

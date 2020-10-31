@@ -12,6 +12,8 @@ import DiscoveryPage from '../pages/discovery/DiscoveryPage';
 import ModifyNicknamePage from '../pages/user/page/profile/page/modify-nickname/ModifyNicknamePage';
 import ModifySignaturePage from '../pages/user/page/profile/page/modify-signature/ModifySignaturePage';
 import ModifyAvatar from '../pages/user/page/profile/page/modify-avatar/ModifyAvatar';
+import ModifyPhonePage from '../pages/user/page/profile/page/modify-phone/ModifyPhonePage';
+import ModifyPasswordPage from '../pages/user/page/profile/page/modify-password/ModifyPasswordPage';
 
 
 const module_user = [
@@ -53,6 +55,20 @@ const module_user = [
   {
     name: 'ModifySignaturePage',
     component: ModifySignaturePage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'ModifyPhonePage',
+    component: ModifyPhonePage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'ModifyPasswordPage',
+    component: ModifyPasswordPage,
     options: {
       header: () => null,
     }
