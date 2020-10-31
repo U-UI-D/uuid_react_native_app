@@ -6,7 +6,106 @@ import WorkDetailPage from '../pages/work/detail/WorkDetailPage';
 import UserPage from '../pages/user/UserPage';
 import LoginPage from '../pages/common/LoginPage';
 import RegisterPage from '../pages/common/RegisterPage';
+import UserSettingPage from '../pages/user/page/setting/UserSettingPage';
+import UserProfilePage from '../pages/user/page/profile/UserProfilePage';
+import DiscoveryPage from '../pages/discovery/DiscoveryPage';
+import ModifyNicknamePage from '../pages/user/page/profile/page/modify-nickname/ModifyNicknamePage';
+import ModifySignaturePage from '../pages/user/page/profile/page/modify-signature/ModifySignaturePage';
+import ModifyAvatar from '../pages/user/page/profile/page/modify-avatar/ModifyAvatar';
 
+
+const module_user = [
+  {
+    name: 'UserPage',
+    component: UserPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'UserSettingPage',
+    component: UserSettingPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'UserProfilePage',
+    component: UserProfilePage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'ModifyAvatar',
+    component: ModifyAvatar,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'ModifyNicknamePage',
+    component: ModifyNicknamePage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'ModifySignaturePage',
+    component: ModifySignaturePage,
+    options: {
+      header: () => null,
+    }
+  },
+];
+
+const module_work = [
+  {
+    name: 'WorkDetailPage',
+    component: WorkDetailPage,
+    options: {
+      header: () => null,
+    }
+  },
+];
+
+const module_common = [
+  {
+    name: 'LoginPage',
+    component: LoginPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'RegisterPage',
+    component: RegisterPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'AboutPage',
+    component: AboutPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'DemoPage',
+    component: DemoPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'DiscoveryPage',
+    component: DiscoveryPage,
+    options: {
+      header: () => null,
+    }
+  },
+];
 
 const routes = [
   {
@@ -27,49 +126,10 @@ const routes = [
       header: () => null,
     }
   },
-  {
-    name: 'DemoPage',
-    component: DemoPage,
-    options: {
-      header: () => null,
-    }
-  },
-  {
-    name: 'AboutPage',
-    component: AboutPage,
-    options: {
-      header: () => null,
-    }
-  },
-  {
-    name: 'UserPage',
-    component: UserPage,
-    options: {
-      header: () => null,
-    }
-  },
-  {
-    name: 'WorkDetailPage',
-    component: WorkDetailPage,
-    options: {
-      header: () => null,
-    }
-  },
-  {
-    name: 'LoginPage',
-    component: LoginPage,
-    options: {
-      header: () => null,
-    }
-  },
-  {
-    name: 'RegisterPage',
-    component: RegisterPage,
-    options: {
-      header: () => null,
-    }
-  },
 
+  ...module_user,
+  ...module_work,
+  ...module_common,
 
 ];
 
