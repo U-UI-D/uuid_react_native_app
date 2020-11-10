@@ -15,13 +15,13 @@ class RegisterPage extends React.Component {
       keyboardHeight: '',
       thirdLoginIcon: [
         {
-          icon: require('../../assets/icon/common/qq.png')
+          icon: require('../../assets/icon/icon1/qq.png')
         },
         {
-          icon: require('../../assets/icon/common/wechat.png')
+          icon: require('../../assets/icon/icon1/wechat.png')
         },
         {
-          icon: require('../../assets/icon/common/weibo.png')
+          icon: require('../../assets/icon/icon1/weibo.png')
         }
       ]
     };
@@ -100,7 +100,6 @@ class RegisterPage extends React.Component {
                     nav.goBack();
                   }else {
                     console.log("帐号密码错误");
-                    React.showPositionToast("帐号密码错误");
                   }
                 }}>获取验证码</Text>
               </LinearGradient>

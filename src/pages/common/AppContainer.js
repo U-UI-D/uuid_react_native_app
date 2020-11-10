@@ -1,9 +1,9 @@
 import * as React from 'react';
 import HomePage from "../home/HomePage";
-import DemoPage from '../demo/DemoPage';
 import Tabbar from '../../components/common/tabbar/Tabbar';
 import UserPage from '../user/UserPage';
 import DiscoveryPage from '../discovery/DiscoveryPage';
+import MessagePage from '../message/MessagePage';
 
 
 const tabScreens = [
@@ -12,38 +12,41 @@ const tabScreens = [
     name: "首页",
     component: HomePage,
     options: {},
-    icon0: require('../../assets/icon/tabbar/shouye0.png'),
-    icon1: require('../../assets/icon/tabbar/shouye1.png'),
+    icon0: require('../../assets/icon/icon0/uuid.png'),
+    icon1: require('../../assets/icon/icon1/uuid.png'),
   },
   {
     key: "DiscoveryPage",
     name: "发现",
     component: DiscoveryPage,
     options: {},
-    icon0: require('../../assets/icon/tabbar/shoucang0.png'),
-    icon1: require('../../assets/icon/tabbar/shoucang1.png'),
+    icon0: require('../../assets/icon/icon0/navigation.png'),
+    icon1: require('../../assets/icon/icon1/navigation.png'),
+    iconSize: 22
   },
   {
-    key: "DemoPage",
-    name: "Demo",
-    component: DemoPage,
+    key: "MessagePage",
+    name: "消息",
+    component: MessagePage,
     options: {},
-    icon0: require('../../assets/icon/tabbar/sousuo0.png'),
-    icon1: require('../../assets/icon/tabbar/sousuo1.png'),
+    icon0: require('../../assets/icon/icon0/message.png'),
+    icon1: require('../../assets/icon/icon1/message.png'),
+    iconSize: 24
   },
   {
     key: "UserPage",
     name: "我的",
     component: UserPage,
     options: {},
-    icon0: require('../../assets/icon/tabbar/wode0.png'),
-    icon1: require('../../assets/icon/tabbar/wode1.png'),
+    icon0: require('../../assets/icon/icon0/user.png'),
+    icon1: require('../../assets/icon/icon1/user.png'),
+    iconSize: 24
   },
 ];
 
 export default function AppContainer() {
   return (
-    <Tabbar tabScreens={tabScreens} />
+    <Tabbar tabScreens={tabScreens} color={"#009BFF"} inactiveColor={"#d6d6d6"} />
   );
 }
 

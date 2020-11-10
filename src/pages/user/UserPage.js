@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, ScrollView, StyleSheet, Dimensions, ToastAndroid} from 'react-native';
 import styles from '../../style/styles';
 import CountBox from './component/CountBox';
@@ -9,16 +9,19 @@ import {request} from '../../utils/network/AxiosRequest';
 import {Button, Flex, WhiteSpace, WingBlank} from '@ant-design/react-native';
 import RouteConst from '../../router/RouteConst';
 import {connect} from 'react-redux';
-import {ALImage, ALPlaceView} from '../../components/al-components/ALComponent';
+import {ALImage, ALPlaceView, ALTapView} from '../../components/al-components/ALComponent';
 import ScreenUtils from '../../utils/ScreenUtils';
 import ALText from '../../components/al-components/al-text/ALText';
 import {Icon, Button as MTButton} from 'beeshell';
 import ALTabs from '../../components/al-components/al-tabs/ALTabs';
 import SwipeTab1 from './component/SwipeTab1';
 import SwipeTab2 from './component/SwipeTab2';
+import ALPageContainer from '../../components/al-components/al-page-container/ALPageContainer';
+import ALLoading from '../../components/al-components/al-loading/ALLoading';
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
+
 
 class UserPage extends React.Component {
 
@@ -47,15 +50,15 @@ class UserPage extends React.Component {
       ],
       iconTextData: [
         {
-          icon: require('../../assets/icon/user/shoucang.png'),
+          icon: require('../../assets/icon/icon1/favor.png'),
           text: '我收藏的',
         },
         {
-          icon: require('../../assets/icon/user/xiaoxi.png'),
+          icon: require('../../assets/icon/icon1/comment.png'),
           text: '我的评论',
         },
         {
-          icon: require('../../assets/icon/user/dianzan.png'),
+          icon: require('../../assets/icon/icon1/like.png'),
           text: '点赞',
         },
       ],
@@ -121,9 +124,17 @@ class UserPage extends React.Component {
           comment: 362,
         },
       ],
-      isLogin: false,
+      enableSubScroll: false,
     };
   }
+
+  onScroll = (event) => {
+    let {x, y} = event.nativeEvent.contentOffset;
+    console.log(y);
+    this.setState({
+      enableSubScroll: Math.floor(y) > 435,
+    });
+  };
 
   // 渲染函数
   render() {
@@ -134,50 +145,57 @@ class UserPage extends React.Component {
     const unLoginView = (
       <View style={[styles.alFlexCenter, styles.alFlexRow, styles.alFlexSpaceEvenly]}>
         <Button onPress={() => {
-          this.props.navigation.push(RouteConst.LOGIN_PAGE);
+          this.props.navigation.push(RouteConst.user.LOGIN_PAGE);
         }}>登录</Button>
         <Button onPress={() => {
-          this.props.navigation.push(RouteConst.REGISTER_PAGE);
+          this.props.navigation.push(RouteConst.user.REGISTER_PAGE);
         }}>注册</Button>
       </View>
     );
 
     const tabs = [
-      {key: 'tab1', title: '作品'},
-      {key: 'tab2', title: '收藏'},
-      {key: 'tab3', title: '点赞'},
+      {key: 'tab1', title: '作品', scene: <SwipeTab1 {...this.props} enableScroll={this.state.enableSubScroll}/>},
+      {key: 'tab2', title: '收藏', scene: <SwipeTab2 {...this.props} />},
+      {key: 'tab3', title: '点赞', scene: <SwipeTab2 {...this.props} />},
     ];
 
-    const sceneMap = {
-      tab1: () => <SwipeTab1 {...this.props} />,
-      tab2: () => <SwipeTab2 {...this.props} />,
-      tab3: () => <SwipeTab2 {...this.props} />,
-    };
 
     if (!isLogin) {
       return unLoginView;
     } else {
       return (
         userInfo === null ?
-          (
-            <View style={styles.alFlexCenter}><Text>无数据</Text></View>
-          )
+          <ALLoading/>
           :
-          <ScrollView style={{
-            backgroundColor: '#fff',
-            position: 'relative',
-          }}>
+          <ScrollView stickyHeaderIndices={[6]}
+                      onScroll={this.onScroll}
+                      style={{
+                        backgroundColor: '#fff',
+                        position: 'relative',
+                      }}>
 
             <View>
-              <ALImage src={require('../../assets/image/user/bg.jpg')}/>
+              <ALImage src={require('../../assets/image/user/bg.jpg')} height={220}/>
             </View>
 
             <View style={{position: 'absolute', top: 16, width: ScreenUtils.getScreenWidth()}}>
-              <Flex style={[styles.alPadding20]} justify="between">
-                <Text></Text>
-                <Text onPress={() => {
-                  this.props.navigation.navigate(RouteConst.USER_SETTING_PAGE);
-                }} style={{color: '#fff'}}>设置</Text>
+              <Flex style={[styles.alPadding20]} justify="flex-end">
+                <ALTapView onPress={() => {
+                  this.props.navigation.navigate(RouteConst.user.USER_SETTING_PAGE);
+                }}>
+                  <Icon source={require('../../assets/icon/icon1/image.png')}
+                        size={28} tintColor={"#fff"}/>
+                </ALTapView>
+
+                <ALPlaceView width={20} />
+
+                <ALTapView onPress={() => {
+                  this.props.navigation.navigate(RouteConst.user.USER_SETTING_PAGE);
+                }}>
+                  <Icon source={require('../../assets/icon/icon1/setting.png')}
+                        size={26} tintColor={"#fff"}/>
+                </ALTapView>
+
               </Flex>
             </View>
 
@@ -189,12 +207,12 @@ class UserPage extends React.Component {
                   <Flex.Item style={{marginLeft: 20}}>
                     <Flex direction={'column'} justify={'center'}>
                       <ALText style={{alignSelf: 'stretch'}} hNum={2}>{userInfo.nickname}</ALText>
-                      <WhiteSpace />
+                      <WhiteSpace/>
                       <ALText type={'desc'} style={{alignSelf: 'stretch'}}>{userInfo.sign}</ALText>
                     </Flex>
                   </Flex.Item>
                   <Button style={{borderWidth: 0}} type="ghost" onPress={() => {
-                    this.props.navigation.navigate(RouteConst.USER_PROFILE_PAGE)
+                    this.props.navigation.navigate(RouteConst.user.USER_PROFILE_PAGE);
                   }}>
                     <Icon source={require('beeshell/dist/common/images/icons/angle-right.png')}
                           size={14}
@@ -215,27 +233,22 @@ class UserPage extends React.Component {
               }
             </View>
 
-            {/*收藏、评论、点赞*/}
-            <View style={[localStyle.countBoxStyle]}>
-              {
-                iconTextData.map((item, index) => {
-                  return <IconTextBox key={item.text} icon={item.icon} text={item.text}/>;
-                })
-              }
-            </View>
 
             {/*分割线*/}
-            <View style={styles.alMarginBottom20}>
+            <View style={styles.alMarginTop20}>
               <ALDivider/>
             </View>
 
-            {/*tab标题栏*/}
-            <View style={{width: ScreenUtils.getScreenWidth()}}>
-              <ALTabs
-                tabs={tabs}
-                sceneMap={sceneMap}
-                tabBarStyle={localStyle.tabBarStyle} />
-
+            <View>
+              {/*tab标题栏*/}
+              <View style={{width: ScreenUtils.getScreenWidth(), height: ScreenUtils.getScreenHeight()}}>
+                <ALTabs
+                  tabs={tabs}
+                  useSceneMap={false}
+                  tabBarStyle={localStyle.tabBarStyle}
+                  labelStyle={{fontSize: 18}}
+                  borderStyle={{backgroundColor: '#00000000'}}/>
+              </View>
             </View>
 
 
@@ -293,9 +306,11 @@ const localStyle = StyleSheet.create({
     color: '#999',
   },
 
-  tabBarStyle:{
-    backgroundColor: "#00000000"
-  }
+  tabBarStyle: {
+    width: 200,
+    paddingTop: 30,
+    backgroundColor: '#00000000',
+  },
 });
 
 

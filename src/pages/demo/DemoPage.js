@@ -65,12 +65,12 @@ class DemoPage extends React.Component {
           <View style={localStyle.box}>
             <Text style={localStyle.title}>路由/页面跳转</Text>
             <Button onPress={() => {
-              this.props.navigation.push(RouteConst.ABOUT_PAGE);
+              this.props.navigation.push(RouteConst.other.ABOUT_PAGE);
             }}>跳转到关于页面</Button>
             <WhiteSpace/>
             <Button type="primary"
                     onPress={() => {
-                      this.props.navigation.push(RouteConst.ABOUT_PAGE, {id: 1});
+                      this.props.navigation.push(RouteConst.other.ABOUT_PAGE, {id: 1});
                     }}>带参数跳转到关于页面</Button>
           </View>
 

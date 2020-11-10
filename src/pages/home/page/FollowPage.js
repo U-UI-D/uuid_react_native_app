@@ -1,5 +1,11 @@
 import React from "react";
-import {View, Text} from 'react-native'
+import {View, Text, ScrollView} from 'react-native';
+import ALLoading from '../../../components/al-components/al-loading/ALLoading';
+import ALPlaceView from '../../../components/al-components/al-place-view/ALPlaceView';
+import {TouchableItem} from 'react-native-tab-view';
+import RouteConst from '../../../router/RouteConst';
+import WorkBox from '../../../components/common/work-box/WorkBox';
+import styles from '../../../style/styles';
 
 class FollowPage extends React.Component{
 
@@ -13,10 +19,32 @@ class FollowPage extends React.Component{
 
   // 渲染函数
   render() {
+    const nav = this.props.navigation;
     return (
-        <View style={localStyle.flexCenter}>
-          <Text style={localStyle.textColorBlue}>关注</Text>
-        </View>
+      this.props.workList === undefined ? <ALLoading /> : (
+        <ScrollView nestedScrollEnabled>
+          <ALPlaceView height={20}/>
+
+          {
+            this.props.workList.map((item, index) => {
+              return (
+                <TouchableItem key={item.title}
+                               onPress={() => {
+                                 this.props.navigation.push(RouteConst.work.WORK_DETAIL_PAGE, {workData: item});
+                               }}>
+                  <WorkBox navigation={nav} data={item}/>
+                </TouchableItem>
+              );
+            })
+          }
+
+          <View style={{height: 50}}>
+            <Text style={[styles.alTextCenter, styles.alColorGray]}>
+              到底啦~
+            </Text>
+          </View>
+        </ScrollView>
+      )
     );
   }
 

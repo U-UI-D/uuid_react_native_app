@@ -3,6 +3,8 @@ import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import styles from '../../../style/styles';
 import ShowWorkBox from './ShowWorkBox';
 import ScreenUtils from '../../../utils/ScreenUtils';
+import ALPageContainer from '../../../components/al-components/al-page-container/ALPageContainer';
+import {Flex} from '@ant-design/react-native';
 
 class SwipeTab1 extends React.Component{
 
@@ -11,6 +13,126 @@ class SwipeTab1 extends React.Component{
     super(props);
     this.state = {
       workData: [
+        {
+          url: require('../../../assets/image/user/poster1.png'),
+          title: 'UI中国手机客户端原创设计',
+          like: 12,
+          comment: 32,
+        },
+        {
+          url: require('../../../assets/image/user/poster2.png'),
+          title: '「汉学」文学工具产品的视觉与体验碰撞',
+          like: 43,
+          comment: 2432,
+        },
+        {
+          url: require('../../../assets/image/user/poster3.png'),
+          title: '【顷刻】_视听解说APP',
+          like: 123,
+          comment: 5452,
+        },
+        {
+          url: require('../../../assets/image/user/poster4.png'),
+          title: '拼多多APP REDESIGN',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster5.png'),
+          title: 'Redesign《在外》APP ',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster6.png'),
+          title: '植物类社交APP概念设计',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster7.png'),
+          title: '优灵APP改版 - 帮助你发现优秀产品和设计灵感',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster8.png'),
+          title: '晓知新闻APP',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster9.png'),
+          title: '微信Redesign（重设计）',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster10.png'),
+          title: '生活家 - APP视觉设计',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster1.png'),
+          title: 'UI中国手机客户端原创设计',
+          like: 12,
+          comment: 32,
+        },
+        {
+          url: require('../../../assets/image/user/poster2.png'),
+          title: '「汉学」文学工具产品的视觉与体验碰撞',
+          like: 43,
+          comment: 2432,
+        },
+        {
+          url: require('../../../assets/image/user/poster3.png'),
+          title: '【顷刻】_视听解说APP',
+          like: 123,
+          comment: 5452,
+        },
+        {
+          url: require('../../../assets/image/user/poster4.png'),
+          title: '拼多多APP REDESIGN',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster5.png'),
+          title: 'Redesign《在外》APP ',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster6.png'),
+          title: '植物类社交APP概念设计',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster7.png'),
+          title: '优灵APP改版 - 帮助你发现优秀产品和设计灵感',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster8.png'),
+          title: '晓知新闻APP',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster9.png'),
+          title: '微信Redesign（重设计）',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster10.png'),
+          title: '生活家 - APP视觉设计',
+          like: 123,
+          comment: 362,
+        },
         {
           url: require('../../../assets/image/user/poster1.png'),
           title: 'UI中国手机客户端原创设计',
@@ -148,23 +270,24 @@ class SwipeTab1 extends React.Component{
       return emptyView;
     }
     return (
-        <ScrollView>
-          {/*作品列表*/}
-          <View style={[styles.alFlexRow, styles.alFlexWrap, styles.alPadding20, styles.alFlexSpaceBetween]}>
-            {
-              this.state.workData.map((item, index) => {
-                return <View key={index} style={[styles.alMarginBottom25]}>
-                  <ShowWorkBox
-                    width={ScreenUtils.getScreenWidth() / 2.4}
-                    url={item.url}
-                    title={item.title}
-                    like={item.like}
-                    comment={item.comment}/>
-                </View>;
-              })
-            }
-          </View>
-        </ScrollView>
+      <ScrollView nestedScrollEnabled={this.props.enableScroll}
+                  showsVerticalScrollIndicator={false}>
+        {/*作品列表*/}
+        <Flex justify="between" wrap="wrap" style={{padding: 20}}>
+          {
+            this.state.workData.map((item, index) => {
+              return <View key={index} style={[styles.alMarginBottom25]}>
+                <ShowWorkBox
+                  width={ScreenUtils.getScreenWidth() / 2.4}
+                  url={item.url}
+                  title={item.title}
+                  like={item.like}
+                  comment={item.comment}/>
+              </View>;
+            })
+          }
+        </Flex>
+      </ScrollView>
     );
   }
 

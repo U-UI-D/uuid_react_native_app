@@ -3,6 +3,7 @@ import {View, Text} from 'react-native';
 import styles from '../../style/styles';
 import {connect} from 'react-redux';
 import {Button} from 'beeshell';
+import RouteConst from '../../router/RouteConst';
 
 class AboutPage extends React.Component{
 
@@ -23,7 +24,9 @@ class AboutPage extends React.Component{
           <Text style={localStyle.textColorBlue}>id: {this.props.route.params === undefined ? "" : this.props.route.params.id}</Text>
           <Text>{this.props.name}</Text>
 
-          <Button type="danger">按钮</Button>
+          <Button type="danger" onPress={() => {
+            this.props.navigation.navigate(RouteConst.test.TEST_PAGE)
+          }}>测试页面</Button>
         </View>
     );
   }

@@ -1,173 +1,346 @@
-import React from "react";
-import {View, Text, ScrollView} from 'react-native'
+import React from 'react';
+import {View, Text, ScrollView} from 'react-native';
 import styles from '../../../style/styles';
 import ALWrapView from '../../../components/al-components/al-wrap-view/ALWrapView';
 import ALPlaceView from '../../../components/al-components/al-place-view/ALPlaceView';
 import AvatarNickname from '../../../components/common/avatar-nickname/AvatarNickname';
 import {request} from '../../../utils/network/AxiosRequest';
-import {ALImage} from '../../../components/al-components/ALComponent';
+import {ALDivider, ALImage} from '../../../components/al-components/ALComponent';
 import ALPageContainer from '../../../components/al-components/al-page-container/ALPageContainer';
-import {WingBlank} from '@ant-design/react-native';
+import {Flex, WhiteSpace, WingBlank} from '@ant-design/react-native';
 import ScreenUtils from '../../../utils/ScreenUtils';
 import ALText from '../../../components/al-components/al-text/ALText';
+import {Button, Icon} from 'beeshell';
+import ALTapView from '../../../components/al-components/al-tap-view/ALTapView';
+import RouteConst from '../../../router/RouteConst';
+import ALLoading from '../../../components/al-components/al-loading/ALLoading';
 
 //作品详情页
-class WorkDetailPage extends React.Component{
+class WorkDetailPage extends React.Component {
 
   //构造器
   constructor(props) {
     super(props);
     this.state = {
       workData: null,
-      offsetTop: 0
+      offsetTop: 0,
+      favored: false,
+      liked: false,
+      followed: false,
+
+      otherWorkData: [
+        {
+          url: require('../../../assets/image/user/poster1.png'),
+          title: 'UI中国手机客户端原创设计',
+          like: 12,
+          comment: 32,
+        },
+        {
+          url: require('../../../assets/image/user/poster2.png'),
+          title: '「汉学」文学工具产品的视觉与体验碰撞',
+          like: 43,
+          comment: 2432,
+        },
+        {
+          url: require('../../../assets/image/user/poster3.png'),
+          title: '【顷刻】_视听解说APP',
+          like: 123,
+          comment: 5452,
+        },
+        {
+          url: require('../../../assets/image/user/poster4.png'),
+          title: '拼多多APP REDESIGN',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster5.png'),
+          title: 'Redesign《在外》APP ',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster6.png'),
+          title: '植物类社交APP概念设计',
+          like: 123,
+          comment: 362,
+        },
+        {
+          url: require('../../../assets/image/user/poster7.png'),
+          title: '优灵APP改版 - 帮助你发现优秀产品和设计灵感',
+          like: 123,
+          comment: 362,
+        }
+      ],
     };
   }
 
-  onLayout = (event) => {
-    let {x, y, width, height} = event.nativeEvent.layout;
-    console.log("x", x, "y", y, "width", width, "height", height);
-  }
 
   onScroll = (event) => {
     let {x, y} = event.nativeEvent.contentOffset;
 
-    if (y < 400){
-      console.log("x", x, "y", y);
+    if (y < 400) {
+      // console.log('x', x, 'y', y);
       this.setState({
-        offsetTop: Math.floor(y)
-      })
+        offsetTop: Math.floor(y),
+      });
     }
-  }
-
+  };
 
 
   // 渲染函数
   render() {
     const workData = this.state.workData;
 
-
     return (
-        workData === null ? <Text>加载中</Text> :
+      workData === null ? <ALLoading /> :
 
-          <View style={{
-            width: ScreenUtils.getScreenWidth(),
-            height: ScreenUtils.getScreenHeight() + 100
-          }}>
+        <View style={{
+          width: ScreenUtils.getScreenWidth(),
+          position: 'relative',
+          flex: 1,
+        }}>
 
-            <ALPageContainer paddingTop={0} onScroll={this.onScroll}>
+          <ALPageContainer paddingTop={0} onScroll={this.onScroll}>
+
+            {/*顶部封面*/}
+            <View>
+              <ALImage src={workData.poster}/>
+            </View>
+
+            {/*作品详情*/}
+            <View style={[localStyle.detailBox]}>
+
+              <WingBlank>
+                <View>
+
+                  {/*作者信息*/}
+                  <Flex align="center" justify="between">
+
+                    <Flex align="center">
+                      <ALImage src={workData.avatar} round size={40}/>
+                      <Flex direction={"column"}>
+                        <ALText style={{marginLeft: 10, alignSelf: "flex-start"}}>{workData.nickname}</ALText>
+                        <ALText type={"desc"} size={12} style={{marginLeft: 10, alignSelf: "flex-start", fontSize: 12}}>
+                          广州 | UI设计师
+                        </ALText>
+                      </Flex>
+                    </Flex>
+
+                    <Button size="sm" type={this.state.followed ? 'info' : 'default'}
+                            style={[styles.alBorderCapsule, {height: 26, width: 60, paddingLeft: 10, paddingRight: 10}]}
+                            onPress={() => {
+                              this.setState({
+                                followed: !this.state.followed
+                              })
+                            }}>
+                      {
+                        this.state.followed ? (<ALText style={{fontSize: 12}} color="#fff">已关注</ALText>) : (<ALText style={{fontSize: 12}} color="#ccc">+关注</ALText>)
+                      }
+                    </Button>
+
+                  </Flex>
+
+                  <ALPlaceView height={20} />
+
+                  {/*作品标题*/}
+                  <ALText hNum={2}>{workData.title}</ALText>
+
+                  <ALPlaceView height={10} />
+
+                  {/*标签*/}
+                  <Flex>
+                    {
+                      workData.tagList.map((item, index) => {
+                        return (
+                          <ALText key={index} type={'desc'} color={'#000'}
+                                  style={{marginRight: 10, fontSize: 12}}>
+                            {item}
+                          </ALText>
+                        );
+                      })
+                    }
+                  </Flex>
+
+                  <WhiteSpace/>
+
+
+
+                  <WhiteSpace />
+
+                  <Flex justify="between">
+                    <Flex>
+                      <Flex style={{width: 60}}>
+                        <Icon source={require('../../../assets/icon/icon1/look.png')} size={13} tintColor={"#cdcdcd"} />
+                        <Text style={localStyle.iconCountText}>{workData.lookCount}</Text>
+                      </Flex>
+                      <Flex style={{width: 60}}>
+                        <Icon source={require('../../../assets/icon/icon1/like.png')} size={16} tintColor={"#cdcdcd"} />
+                        <Text style={localStyle.iconCountText}>{workData.likeCount}</Text>
+                      </Flex>
+                      <Flex style={{width: 60}}>
+                        <Icon source={require('../../../assets/icon/icon1/comment.png')} size={16} tintColor={"#cdcdcd"} />
+                        <Text style={localStyle.iconCountText}>{workData.commentCount}</Text>
+                      </Flex>
+                    </Flex>
+
+                    <Flex>
+                      <ALText style={localStyle.iconCountText}>1小时前</ALText>
+                    </Flex>
+                  </Flex>
+                </View>
+
+              </WingBlank>
+
+
+              <ALDivider marginTop={20} marginBottom={20} />
+
+
+              {/*作品图片*/}
               <View>
-                <ALImage src={workData.poster} />
+                {
+                  workData.imageUrls.map((item, index) => {
+                    return (
+                      <View key={index}>
+                        <ALTapView onPress={() => {
+                          this.props.navigation.navigate(RouteConst.other.IMAGE_VIEWER_PAGE, {imageUrls: workData.imageUrls, index});
+                        }}>
+                          <ALImage src={item}/>
+                        </ALTapView>
+                      </View>
+                    );
+                  })
+                }
               </View>
 
-              <View style={{
-                backgroundColor: "#fff",
-                paddingTop: 30,
-                borderTopLeftRadius: 20,
-                borderTopRightRadius: 20,
-                marginTop: -50,
-              }}>
-
+              {/*其他作品*/}
+              <View>
                 <WingBlank>
-                  <View style={[styles.alFlexRow, styles.alFlexSpaceBetween]}>
-                    <AvatarNickname
-                      text1={workData.nickname}
-                      text2={"永远相信美好的事情即将发生"}
-                      avatar={workData.avatar} />
-
-                    <ALWrapView>
-                      <View style={[styles.alFlexCenterV]}>
-                        <View style={[localStyle.followBox]}>
-                          <Text style={localStyle.followText}>+关注</Text>
-                        </View>
-                      </View>
-                    </ALWrapView>
-                  </View>
+                  <ALText hNum={3} style={{marginTop: 20}}>其他作品</ALText>
                 </WingBlank>
 
-
-
-                <ALPlaceView height={20} />
-
-                <WingBlank>
-                  <View>
-                    <Text style={{fontSize: 25}}>{this.props.route.params.workData.title}</Text>
-                  </View>
-                </WingBlank>
-
-                <View>
+                <ScrollView horizontal
+                            showsHorizontalScrollIndicator={false}
+                            style={{paddingLeft: 10, paddingRight: 10}}>
                   {
-                    workData.imageUrls.map((item, index) => {
+                    this.state.otherWorkData.map((item, index) => {
                       return (
-                        <View key={index}>
-                          <ALImage src={item} />
-                          {/*<FitImage source={{uri: item}} />*/}
-                          {/*<Image source={{uri: item}} style={{width: ScreenUtils.getScreenWidth(), height: 200}} />*/}
+                        <View key={index} style={{padding: 10}}>
+                          <ALImage src={item.url} width={180} height={120} radius={20} />
                         </View>
                       )
                     })
                   }
-                </View>
+                  <ALPlaceView width={10} />
+                </ScrollView>
               </View>
+            </View>
+
+            <ALPlaceView height={80} />
 
 
-            </ALPageContainer>
+          </ALPageContainer>
 
-            <View style={[
-              styles.alFlexRow,
-              styles.alFlexSpaceBetween,
-              styles.alFlexCenterV,
-              styles.alPaddingTB20,
-              localStyle.topBar,
-
-              {
-                backgroundColor: this.state.offsetTop > 100 ? "#fff" : "#00000000",
-
-              }
-            ]}>
-              <Text style={{color: this.state.offsetTop > 100 ? "#000" : "#fff"}}
-                    onPress={() => {this.props.navigation.goBack()}}>
-                返回
-              </Text>
-              {
-                this.state.offsetTop > 100 ?
-                <ALText type={"title"}
-                        hNum={2}
-                        style={{color: this.state.offsetTop > 100 ? "#000" : "#fff"}}>
+          {/*固定在顶部的导航栏*/}
+          <Flex justify="between" style={[
+            localStyle.topBar,
+            {
+              backgroundColor: this.state.offsetTop > 100 ? '#fff' : '#00000000',
+            },
+          ]}>
+            <Text style={{color: this.state.offsetTop > 100 ? '#000' : '#fff'}}
+                  onPress={() => {
+                    this.props.navigation.goBack();
+                  }}>
+              返回
+            </Text>
+            {
+              this.state.offsetTop > 100 ?
+                <ALText type={'title'}
+                        hNum={3}
+                        style={{color: this.state.offsetTop > 100 ? '#000' : '#fff'}}>
                   {workData.title}
                 </ALText> : null
-              }
-              <Text style={{color: this.state.offsetTop > 100 ? "#000" : "#fff"}}
-                    onPress={() => {this.props.navigation.goBack()}}>
-                分享
-              </Text>
+            }
+            <Text style={{color: this.state.offsetTop > 100 ? '#000' : '#fff'}}
+                  onPress={() => {
+                    this.props.navigation.goBack();
+                  }}>
+              分享
+            </Text>
+          </Flex>
+
+          {/*固定在底部的导航栏*/}
+          <Flex justify="between" style={localStyle.bottomBar}>
+            {/*收藏*/}
+            <View>
+              <ALTapView onPress={() => {
+                this.setState({
+                  favored: !this.state.favored,
+                });
+              }}>
+                <Icon source={require('../../../assets/icon/icon1/love.png')}
+                      tintColor={this.state.favored ? '#2a95ff' : '#666'} size={39}/>
+              </ALTapView>
             </View>
-          </View>
+
+            {/*评论*/}
+            <View>
+              <Icon source={require('../../../assets/icon/icon1/message.png')} tintColor={'#666'} size={30}/>
+            </View>
+
+            {/*分享*/}
+            <View>
+              <Icon source={require('../../../assets/icon/icon1/share.png')} tintColor={'#666'} size={34}/>
+            </View>
+
+            <Button type={this.state.liked ? 'info' : 'default'}
+                    size="sm"
+                    style={[styles.alBorderCapsule]}
+                    onPress={() => {
+                      this.setState({liked: !this.state.liked});
+                    }}>
+              <Flex align="center" style={{width: 50}}>
+                <Icon source={require('../../../assets/icon/icon1/like.png')}
+                      size={18} tintColor={this.state.liked ? '#fff' : '#ccc'}/>
+                <ALPlaceView width={10}/>
+                <ALText style={{fontSize: 12}} color={this.state.liked ? "#fff" : "#ccc"}>点赞</ALText>
+              </Flex>
+            </Button>
+
+          </Flex>
+
+        </View>
 
     );
   }
 
+
   // 生命周期函数
   //组件已挂载
   componentDidMount() {
-    console.log("WorkDetailPage.js======================");
+    console.log('WorkDetailPage.js======================');
     // console.log(this.props.route.params.workData);
-
-    request({
-      url: `https://gitee.com/AlanLee97/dev-mock/raw/master/project/uuid-react-native-app/work/detail/ui-work-detail-id-${this.props.route.params.workData.id}.json`,
-      method: 'GET',
-      data: {}
-    }).then(res => {
-      // console.log(res.data.data);
-      this.setState({workData: res.data.data});
-    }).catch(err => {
-      console.log(err);
-    });
+    this.getWorkData();
   }
 
   //组件将要卸载时
   componentWillUnmount() {
 
   }
+
+  getWorkData = () => {
+    request({
+      url: `https://gitee.com/AlanLee97/dev-mock/raw/master/project/uuid-react-native-app/work/detail/ui-work-detail-id-${this.props.route.params.workData.id}.json`,
+      method: 'GET',
+      data: {},
+    }).then(res => {
+      // console.log(res.data.data);
+      this.setState({workData: res.data.data});
+    }).catch(err => {
+      console.log(err);
+    });
+  };
 
 }
 
@@ -176,35 +349,51 @@ export default WorkDetailPage;
 
 // 样式
 const localStyle = {
-  textColorBlue: {
-    color: "blue"
-  },
-  flexCenter: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
+  detailBox: {
+    backgroundColor: '#fff',
+    paddingTop: 20,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    marginTop: -50,
   },
   followBox: {
     padding: 8,
     width: 80,
-    textAlign: "center",
+    textAlign: 'center',
     borderRadius: 100,
     borderWidth: 2,
-    borderStyle: "solid",
-    borderColor: "#409EFF"
+    borderStyle: 'solid',
+    borderColor: '#409EFF',
   },
   followText: {
-    textAlign: "center",
-    color: "#409EFF"
+    textAlign: 'center',
+    color: '#409EFF',
   },
   topBar: {
-    position: "absolute",
+    position: 'absolute',
     zIndex: 1000,
     paddingLeft: 20,
     paddingRight: 20,
     paddingTop: 36,
-    backgroundColor: "#fff",
-    color: "#fff",
+    paddingBottom: 10,
+    backgroundColor: '#fff',
+    color: '#fff',
     width: ScreenUtils.getScreenWidth(),
+  },
+  bottomBar: {
+    position: 'absolute',
+    zIndex: 1000,
+    paddingLeft: 20,
+    paddingRight: 20,
+    height: 54,
+    bottom: 0,
+    backgroundColor: '#fff',
+    color: '#000',
+    width: ScreenUtils.getScreenWidth(),
+  },
+  iconCountText: {
+    color: "#cdcdcd",
+    fontSize: 12,
+    marginLeft: 6,
   }
-}
+};

@@ -1,5 +1,7 @@
 import React from "react";
 import {View, Text, StyleSheet} from 'react-native'
+import ALEmpty from '../../../components/al-components/al-empty/ALEmpty';
+import styles from '../../../style/styles';
 
 class SwipeTab2 extends React.Component{
 
@@ -14,8 +16,8 @@ class SwipeTab2 extends React.Component{
   // 渲染函数
   render() {
     return (
-      <View>
-        <Text style={{marginTop: 60, textAlign: "center"}}>暂无数据</Text>
+      <View style={{height: 400}}>
+        <ALEmpty tipText="暂无数据" />
       </View>
     );
   }

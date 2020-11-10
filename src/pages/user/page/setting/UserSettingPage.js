@@ -43,7 +43,7 @@ class UserSettingPage extends React.Component {
 
             <ALListItem
               onPress={() => {
-                this.props.navigation.navigate(RouteConst.USER_PROFILE_PAGE);
+                this.props.navigation.navigate(RouteConst.user.USER_PROFILE_PAGE);
               }}
               renderLeft={
                 <ALText hNum={4}>个人信息</ALText>
@@ -51,7 +51,7 @@ class UserSettingPage extends React.Component {
 
             <ALListItem
               onPress={() => {
-                this.props.navigation.navigate(RouteConst.ABOUT_PAGE)
+                this.props.navigation.navigate(RouteConst.other.ABOUT_PAGE)
               }}
               renderLeft={
                 <ALText hNum={4}>关于</ALText>
@@ -62,7 +62,7 @@ class UserSettingPage extends React.Component {
             <Button type="warning" onPress={() => {
               this.props.updateLoginState(false);
               this.props.updateUserInfo(null);
-              this.props.navigation.navigate(RouteConst.APP_CONTAINER);
+              this.props.navigation.navigate(RouteConst.app.APP_CONTAINER);
             }}>退出登录</Button>
           </View>
 

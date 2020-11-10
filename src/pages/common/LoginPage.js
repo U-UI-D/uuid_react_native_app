@@ -17,13 +17,13 @@ class LoginPage extends React.Component {
       keyboardHeight: '',
       thirdLoginIcon: [
         {
-          icon: require('../../assets/icon/common/qq.png')
+          icon: require('../../assets/icon/icon1/qq.png')
         },
         {
-          icon: require('../../assets/icon/common/wechat.png')
+          icon: require('../../assets/icon/icon1/wechat.png')
         },
         {
-          icon: require('../../assets/icon/common/weibo.png')
+          icon: require('../../assets/icon/icon1/weibo.png')
         }
       ]
     };
@@ -185,7 +185,7 @@ class LoginPage extends React.Component {
     console.log(this.state.password);
     if (this.state.username === '1' && this.state.password === '1'){
       this.props.updateLoginState(true);
-      this.props.navigation.navigate(RouteConst.APP_CONTAINER);
+      this.props.navigation.navigate(RouteConst.app.APP_CONTAINER);
     }else {
       console.log("帐号密码错误");
       ToastAndroid.show("帐号密码错误")
