@@ -14,6 +14,15 @@ import ModifySignaturePage from '../pages/user/page/profile/page/modify-signatur
 import ModifyAvatar from '../pages/user/page/profile/page/modify-avatar/ModifyAvatar';
 import ModifyPhonePage from '../pages/user/page/profile/page/modify-phone/ModifyPhonePage';
 import ModifyPasswordPage from '../pages/user/page/profile/page/modify-password/ModifyPasswordPage';
+import TestPage from '../pages/demo/TestPage';
+import TopPage from '../pages/top/TopPage';
+import ImageViewerPage from '../pages/common/ImageViewerPage';
+import WorkPage from '../pages/work/WorkPage';
+import MaterialPage from '../pages/material/MaterialPage';
+import ShopPage from '../pages/shop/ShopPage';
+import MessagePage from '../pages/message/MessagePage';
+import ChatSessionPage from '../pages/message/page/chat-session/ChatSessionPage';
+import VisitorProfilePage from '../pages/user/page/visitor-profile/VisitorProfilePage';
 
 
 const module_user = [
@@ -73,12 +82,73 @@ const module_user = [
       header: () => null,
     }
   },
+  {
+    name: 'VisitorProfilePage',
+    component: VisitorProfilePage,
+    options: {
+      header: () => null,
+    }
+  },
 ];
 
 const module_work = [
   {
+    name: 'WorkPage',
+    component: WorkPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
     name: 'WorkDetailPage',
     component: WorkDetailPage,
+    options: {
+      header: () => null,
+    }
+  },
+];
+
+const module_material = [
+  {
+    name: 'MaterialPage',
+    component: MaterialPage,
+    options: {
+      header: () => null,
+    }
+  },
+];
+
+const module_top = [
+  {
+    name: 'TopPage',
+    component: TopPage,
+    options: {
+      header: () => null,
+    }
+  },
+];
+
+const module_shop = [
+  {
+    name: 'ShopPage',
+    component: ShopPage,
+    options: {
+      header: () => null,
+    }
+  },
+];
+
+const module_message = [
+  {
+    name: 'MessagePage',
+    component: MessagePage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'ChatSessionPage',
+    component: ChatSessionPage,
     options: {
       header: () => null,
     }
@@ -115,8 +185,22 @@ const module_common = [
     }
   },
   {
+    name: 'TestPage',
+    component: TestPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
     name: 'DiscoveryPage',
     component: DiscoveryPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'ImageViewerPage',
+    component: ImageViewerPage,
     options: {
       header: () => null,
     }
@@ -145,6 +229,10 @@ const routes = [
 
   ...module_user,
   ...module_work,
+  ...module_material,
+  ...module_top,
+  ...module_shop,
+  ...module_message,
   ...module_common,
 
 ];
