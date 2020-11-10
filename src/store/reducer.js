@@ -4,6 +4,7 @@ let initState = {
   userInfo: null,
   isLogin: false,
   name: 'AlanLee',
+  scrollY: 0
 };
 
 export function reducer(state = initState, action) {
@@ -24,6 +25,11 @@ export function reducer(state = initState, action) {
 
   if (action.type === 'updateName') {
     newState.name = action.value;
+    console.log('newState', newState);
+  }
+
+  if (action.type === Actions.UPDATE_SCROLL_Y) {
+    newState.scrollY = action.value;
     console.log('newState', newState);
   }
 
