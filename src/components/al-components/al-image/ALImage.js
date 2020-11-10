@@ -109,7 +109,7 @@ ALImage.propTypes = {
   size: PropTypes.number,
   style: PropTypes.object,
   className: PropTypes.string,
-  onClick: PropTypes.func,
+  onPress: PropTypes.func,
 };
 
 // prop默认值
@@ -117,7 +117,7 @@ ALImage.defaultProps = {
   fit: 'cover',
   round: false,
   style: {},
-  onClick: null,
+  onPress: null,
 };
 
 export default ALImage;

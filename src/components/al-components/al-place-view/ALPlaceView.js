@@ -1,38 +1,29 @@
 import React from "react";
 import {View} from 'react-native'
+import PropTypes from "prop-types";
 
-class ALPlaceView extends React.Component{
+function ALPlaceView(props) {
 
-  //构造器
-  constructor(props) {
-    super(props);
-    this.state = {
-
-    };
-  }
-
-  // 渲染函数
-  render() {
-    return (
-        <View style={{width: this.props.width, height: this.props.height}}>
-          {this.props.children}
-        </View>
-    );
-  }
-
-  // 生命周期函数
-  //组件已挂载
-  componentDidMount() {
-
-  }
-
-  //组件将要卸载时
-  componentWillUnmount() {
-
-  }
+  return (
+    <View style={{
+      width: props.width,
+      height: props.height,
+      ...props.style
+    }}>
+      {props.children}
+    </View>
+  );
 
 }
 
+ALPlaceView.propTypes = {
+  width: PropTypes.number,
+  height: PropTypes.number,
+  style: PropTypes.object,
+}
+ALPlaceView.defaultProps = {
+  style: {}
+}
 
 export default ALPlaceView;
 

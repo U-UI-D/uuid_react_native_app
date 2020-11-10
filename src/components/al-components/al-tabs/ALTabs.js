@@ -1,7 +1,8 @@
 import React, {PureComponent} from 'react';
 import {SafeAreaView, Dimensions, StyleSheet,} from 'react-native';
 import {SceneMap, TabView, TabBar} from 'react-native-tab-view';
-import styles from '../../../style/styles';
+import PropTypes from 'prop-types';
+import ScreenUtils from '../../../utils/ScreenUtils';
 const screenWidth = Dimensions.get('window').width;
 
 export default class ALTabs extends PureComponent {
@@ -16,18 +17,27 @@ export default class ALTabs extends PureComponent {
     };
   }
 
+  switchScene = ({route, jumpTo}) => {
+    let tabs = this.props.tabs;
+    for (let i = 0; i < tabs.length; i++) {
+      if (route.key === tabs[i].key){
+        return tabs[i].scene;
+      }
+    }
+  }
+
   // 渲染
   render() {
 
     const sceneMap = this.props.sceneMap;
-
+    const props = this.props;
     return (
       <SafeAreaView style={{flex: 1}}>
         <TabView
           navigationState={this.state}
-          renderScene={SceneMap(sceneMap)}
+          renderScene={props.renderScene ?? (props.useSceneMap ? SceneMap(sceneMap) : this.switchScene)}
           onIndexChange={index => this.setState({index})}
-          initialLayout={{width: screenWidth}}
+          initialLayout={{width: props.width, height: props.height}}
           renderTabBar={props =>
             <TabBar
               {...props}
@@ -47,10 +57,31 @@ export default class ALTabs extends PureComponent {
 
   componentDidMount() {
     this.setState({
+      index: 0,
       routes: this.props.tabs
     });
   }
 }
+
+// 属性类型
+ALTabs.propTypes = {
+  style: PropTypes.object,
+  useSceneMap: PropTypes.bool,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  switchScene: PropTypes.func,
+  renderScene: PropTypes.func,
+  defaultIndex: PropTypes.number,
+};
+
+// 默认属性值
+ALTabs.defaultProps = {
+  style: {},
+  useSceneMap: true,
+  width: ScreenUtils.getScreenWidth(),
+  height: ScreenUtils.getScreenHeight(),
+  defaultIndex: 0
+};
 
 const localStyle = StyleSheet.create({
   tabBarStyle: {

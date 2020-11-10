@@ -51,7 +51,9 @@ class ALListItem extends React.Component{
                 </Flex>
               </Flex.Item>
             </Flex>
-            <ALDivider />
+            {
+              this.props.showBottomLine ? <ALDivider /> : null
+            }
           </Flex.Item>
         </Flex>
       </View>
@@ -89,6 +91,7 @@ ALListItem.propTypes = {
   renderLeft: PropTypes.object,
   renderCenter: PropTypes.object,
   renderRight: PropTypes.object,
+  showBottomLine: PropTypes.bool,
 };
 
 // prop默认值
@@ -103,6 +106,7 @@ ALListItem.defaultProps = {
   renderLeft: null,
   renderCenter: null,
   renderRight: null,
+  showBottomLine: true
 };
 
 

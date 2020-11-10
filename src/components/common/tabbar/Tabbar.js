@@ -59,8 +59,8 @@ class Tabbar extends React.Component {
           <Image key={item.name}
                  source={focused ? item.icon1 : item.icon0}
                  style={{
-                   width: this.props.iconSize,
-                   height: this.props.iconSize,
+                   width: item.iconSize ?? this.props.iconSize,
+                   height: item.iconSize ?? this.props.iconSize,
                  }}
           />
         );
