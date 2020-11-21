@@ -2,7 +2,7 @@ import HomePage from "../pages/home/HomePage";
 import AboutPage from '../pages/about/AboutPage';
 import DemoPage from '../pages/demo/DemoPage';
 import AppContainer from '../pages/common/AppContainer';
-import WorkDetailPage from '../pages/work/detail/WorkDetailPage';
+import WorkDetailPage from '../pages/work/page/detail/WorkDetailPage';
 import UserPage from '../pages/user/UserPage';
 import LoginPage from '../pages/common/LoginPage';
 import RegisterPage from '../pages/common/RegisterPage';

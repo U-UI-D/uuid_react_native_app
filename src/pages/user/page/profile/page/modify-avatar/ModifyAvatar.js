@@ -7,7 +7,7 @@ import ScreenUtils from '../../../../../../utils/ScreenUtils';
 import styles from '../../../../../../style/styles';
 import {Button} from 'beeshell';
 import {ALDivider, ALImage, ALPlaceView} from '../../../../../../components/al-components/ALComponent';
-import Actions from '../../../../../../store/actions';
+import ActionTypes from '../../../../../../store/action-types';
 import {connect} from 'react-redux';
 
 function ModifyAvatar(props) {
@@ -57,7 +57,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateUserInfo(data) {
       let action = {
-        type: Actions.UPDATE_USERINFO,
+        type: ActionTypes.UPDATE_USERINFO,
         value: data,
       };
       dispatch(action);

@@ -1,10 +1,9 @@
-import Actions from './actions';
+import ActionTypes from './action-types';
 
 let initState = {
   userInfo: null,
+  userToken: null,
   isLogin: false,
-  name: 'AlanLee',
-  scrollY: 0
 };
 
 export function reducer(state = initState, action) {
@@ -13,26 +12,20 @@ export function reducer(state = initState, action) {
 
   let newState = JSON.parse(JSON.stringify(state));
 
-  if (action.type === Actions.UPDATE_USERINFO) {
+  if (action.type === ActionTypes.UPDATE_USERINFO) {
     newState.userInfo = action.value;
     console.log('newState', newState);
   }
 
-  if (action.type === Actions.UPDATE_LOGIN_STATE) {
+  if (action.type === ActionTypes.UPDATE_USER_TOKEN) {
+    newState.userToken = action.value;
+    console.log('newState', newState);
+  }
+
+  if (action.type === ActionTypes.UPDATE_LOGIN_STATE) {
     newState.isLogin = action.value;
     console.log('newState', newState);
   }
 
-  if (action.type === 'updateName') {
-    newState.name = action.value;
-    console.log('newState', newState);
-  }
-
-  if (action.type === Actions.UPDATE_SCROLL_Y) {
-    newState.scrollY = action.value;
-    console.log('newState', newState);
-  }
-
-  // sessionStorage.setItem("store", JSON.stringify(newState));
   return newState;
 }

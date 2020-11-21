@@ -28,7 +28,7 @@ class FollowPage extends React.Component{
           {
             this.props.workList.map((item, index) => {
               return (
-                <TouchableItem key={item.title}
+                <TouchableItem key={index}
                                onPress={() => {
                                  this.props.navigation.push(RouteConst.work.WORK_DETAIL_PAGE, {workData: item});
                                }}>

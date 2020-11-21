@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ToastAndroid} from 'react-native';
 import ALPageContainer from '../../../../components/al-components/al-page-container/ALPageContainer';
 import {Button, Flex, List, WingBlank} from '@ant-design/react-native';
 import ALText from '../../../../components/al-components/al-text/ALText';
@@ -7,8 +7,10 @@ import styles from '../../../../style/styles';
 import {Icon} from 'beeshell';
 import {connect} from 'react-redux';
 import RouteConst from '../../../../router/RouteConst';
-import Actions from '../../../../store/actions';
+import ActionTypes from '../../../../store/action-types';
 import ALListItem from '../../../../components/al-components/al-list/al-list-item/ALListItem';
+import {HttpRequest} from '../../../../utils/network/AxiosRequest';
+import {ApiConst} from '../../../../utils/network/ApiConst';
 
 class UserSettingPage extends React.Component {
 
@@ -59,11 +61,7 @@ class UserSettingPage extends React.Component {
           </View>
 
           <View style={styles.alMarginTB40}>
-            <Button type="warning" onPress={() => {
-              this.props.updateLoginState(false);
-              this.props.updateUserInfo(null);
-              this.props.navigation.navigate(RouteConst.app.APP_CONTAINER);
-            }}>退出登录</Button>
+            <Button type="warning" onPress={this.logout}>退出登录</Button>
           </View>
 
 
@@ -84,11 +82,30 @@ class UserSettingPage extends React.Component {
 
   }
 
+  logout = () => {
+    HttpRequest.post({
+      url: ApiConst.sso.POST_LOGOUT,
+      data: {
+        token: this.props.userToken
+      }
+    }).then(res => {
+      if (res.err === null){
+        this.props.updateLoginState(false);
+        this.props.updateUserInfo(null);
+        this.props.updateUserToken(null);
+        this.props.navigation.navigate(RouteConst.app.APP_CONTAINER);
+      }else {
+        ToastAndroid.show("网络错误，请重试！", ToastAndroid.SHORT);
+      }
+    })
+  }
+
 }
 
 const mapStateToProps = (state) => {
   return {
     isLogin: state.isLogin,
+    userToken: state.userToken,
   };
 };
 
@@ -96,14 +113,21 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateLoginState(data) {
       let action = {
-        type: Actions.UPDATE_LOGIN_STATE,
+        type: ActionTypes.UPDATE_LOGIN_STATE,
         value: data,
       };
       dispatch(action);
     },
     updateUserInfo(data) {
       let action = {
-        type: Actions.UPDATE_USERINFO,
+        type: ActionTypes.UPDATE_USERINFO,
+        value: data,
+      };
+      dispatch(action);
+    },
+    updateUserToken(data) {
+      let action = {
+        type: ActionTypes.UPDATE_USER_TOKEN,
         value: data,
       };
       dispatch(action);

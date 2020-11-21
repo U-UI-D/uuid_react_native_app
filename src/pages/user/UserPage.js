@@ -1,22 +1,18 @@
-import React, {useEffect, useState} from 'react';
-import {View, Text, ScrollView, StyleSheet, Dimensions, ToastAndroid} from 'react-native';
+import React from 'react';
+import {View, ScrollView, StyleSheet, Dimensions} from 'react-native';
 import styles from '../../style/styles';
 import CountBox from './component/CountBox';
-import IconTextBox from './component/IconTextBox';
-import ShowWorkBox from './component/ShowWorkBox';
 import ALDivider from '../../components/al-components/al-divider/ALDivider';
-import {request} from '../../utils/network/AxiosRequest';
 import {Button, Flex, WhiteSpace, WingBlank} from '@ant-design/react-native';
 import RouteConst from '../../router/RouteConst';
 import {connect} from 'react-redux';
 import {ALImage, ALPlaceView, ALTapView} from '../../components/al-components/ALComponent';
 import ScreenUtils from '../../utils/ScreenUtils';
 import ALText from '../../components/al-components/al-text/ALText';
-import {Icon, Button as MTButton} from 'beeshell';
+import {Icon} from 'beeshell';
 import ALTabs from '../../components/al-components/al-tabs/ALTabs';
 import SwipeTab1 from './component/SwipeTab1';
 import SwipeTab2 from './component/SwipeTab2';
-import ALPageContainer from '../../components/al-components/al-page-container/ALPageContainer';
 import ALLoading from '../../components/al-components/al-loading/ALLoading';
 
 let screenWidth = Dimensions.get('window').width;
@@ -29,7 +25,6 @@ class UserPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userInfo: null,
       countData: [
         {
           count: 32,
@@ -125,6 +120,7 @@ class UserPage extends React.Component {
         },
       ],
       enableSubScroll: false,
+      scrollY: 0
     };
   }
 
@@ -133,14 +129,15 @@ class UserPage extends React.Component {
     console.log(y);
     this.setState({
       enableSubScroll: Math.floor(y) > 435,
+      scrollY: y,
     });
   };
 
   // 渲染函数
   render() {
-    const {userInfo, countData, iconTextData, workData} = this.state;
+    const {countData, iconTextData, workData} = this.state;
 
-    const {isLogin} = this.props;
+    const {userInfo, isLogin} = this.props;
 
     const unLoginView = (
       <View style={[styles.alFlexCenter, styles.alFlexRow, styles.alFlexSpaceEvenly]}>
@@ -167,92 +164,104 @@ class UserPage extends React.Component {
         userInfo === null ?
           <ALLoading/>
           :
-          <ScrollView stickyHeaderIndices={[6]}
-                      onScroll={this.onScroll}
-                      style={{
-                        backgroundColor: '#fff',
-                        position: 'relative',
-                      }}>
-
-            <View>
+          <View style={{backgroundColor: "#fff"}}>
+            <View style={{
+              position: "absolute",
+              top: 0,
+              zIndex: 1
+            }}>
               <ALImage src={require('../../assets/image/user/bg.jpg')} height={220}/>
             </View>
 
-            <View style={{position: 'absolute', top: 16, width: ScreenUtils.getScreenWidth()}}>
-              <Flex style={[styles.alPadding20]} justify="flex-end">
-                <ALTapView onPress={() => {
-                  this.props.navigation.navigate(RouteConst.user.USER_SETTING_PAGE);
-                }}>
-                  <Icon source={require('../../assets/icon/icon1/image.png')}
-                        size={28} tintColor={"#fff"}/>
-                </ALTapView>
+            <ScrollView stickyHeaderIndices={[6]}
+                        onScroll={this.onScroll}
+                        style={{
+                          backgroundColor: '#00000000',
+                          position: 'relative',
+                          zIndex: 10,
 
-                <ALPlaceView width={20} />
+                        }}>
+              <ALPlaceView height={220} style={{
+                backgroundColor: `rgba(0, 0, 0, ${0.0022 * this.state.scrollY})`
+              }} />
 
-                <ALTapView onPress={() => {
-                  this.props.navigation.navigate(RouteConst.user.USER_SETTING_PAGE);
-                }}>
-                  <Icon source={require('../../assets/icon/icon1/setting.png')}
-                        size={26} tintColor={"#fff"}/>
-                </ALTapView>
-
-              </Flex>
-            </View>
-
-
-            <WingBlank>
-              <View>
-                <Flex style={styles.alPaddingTB20}>
-                  <ALImage round src={userInfo.avatar} size={90}/>
-                  <Flex.Item style={{marginLeft: 20}}>
-                    <Flex direction={'column'} justify={'center'}>
-                      <ALText style={{alignSelf: 'stretch'}} hNum={2}>{userInfo.nickname}</ALText>
-                      <WhiteSpace/>
-                      <ALText type={'desc'} style={{alignSelf: 'stretch'}}>{userInfo.sign}</ALText>
-                    </Flex>
-                  </Flex.Item>
-                  <Button style={{borderWidth: 0}} type="ghost" onPress={() => {
-                    this.props.navigation.navigate(RouteConst.user.USER_PROFILE_PAGE);
+              <View style={{position: 'absolute', top: 16, width: ScreenUtils.getScreenWidth()}}>
+                <Flex style={[styles.alPadding20]} justify="flex-end">
+                  <ALTapView onPress={() => {
+                    this.props.navigation.navigate(RouteConst.user.USER_SETTING_PAGE);
                   }}>
-                    <Icon source={require('beeshell/dist/common/images/icons/angle-right.png')}
-                          size={14}
-                          tintColor='#bababa'/>
-                  </Button>
+                    <Icon source={require('../../assets/icon/icon1/image.png')}
+                          size={28} tintColor={"#fff"}/>
+                  </ALTapView>
+
+                  <ALPlaceView width={20} />
+
+                  <ALTapView onPress={() => {
+                    this.props.navigation.navigate(RouteConst.user.USER_SETTING_PAGE);
+                  }}>
+                    <Icon source={require('../../assets/icon/icon1/setting.png')}
+                          size={26} tintColor={"#fff"}/>
+                  </ALTapView>
+
                 </Flex>
               </View>
-            </WingBlank>
-
-            {/*统计数据*/}
-            <View style={[localStyle.countBoxStyle]}>
-              {
-                countData.map((item, index) => {
-                  return <CountBox key={item.text}
-                                   count={item.count}
-                                   text={item.text}/>;
-                })
-              }
-            </View>
 
 
-            {/*分割线*/}
-            <View style={styles.alMarginTop20}>
-              <ALDivider/>
-            </View>
+              <View style={{backgroundColor: "#fff"}}>
+                <WingBlank>
+                  <View>
+                    <Flex style={styles.alPaddingTB20}>
+                      <ALImage round src={userInfo.avatar} size={90}/>
+                      <Flex.Item style={{marginLeft: 20}}>
+                        <Flex direction={'column'} justify={'center'}>
+                          <ALText style={{alignSelf: 'stretch'}} hNum={2}>{userInfo.nickname}</ALText>
+                          <WhiteSpace/>
+                          <ALText type={'desc'} style={{alignSelf: 'stretch'}}>{userInfo.sign}</ALText>
+                        </Flex>
+                      </Flex.Item>
+                      <Button style={{borderWidth: 0}} type="ghost" onPress={() => {
+                        this.props.navigation.navigate(RouteConst.user.USER_PROFILE_PAGE);
+                      }}>
+                        <Icon source={require('beeshell/dist/common/images/icons/angle-right.png')}
+                              size={14}
+                              tintColor='#bababa'/>
+                      </Button>
+                    </Flex>
+                  </View>
+                </WingBlank>
 
-            <View>
-              {/*tab标题栏*/}
-              <View style={{width: ScreenUtils.getScreenWidth(), height: ScreenUtils.getScreenHeight()}}>
-                <ALTabs
-                  tabs={tabs}
-                  useSceneMap={false}
-                  tabBarStyle={localStyle.tabBarStyle}
-                  labelStyle={{fontSize: 18}}
-                  borderStyle={{backgroundColor: '#00000000'}}/>
+                {/*统计数据*/}
+                <View style={[localStyle.countBoxStyle]}>
+                  {
+                    countData.map((item, index) => {
+                      return <CountBox key={item.text}
+                                       count={item.count}
+                                       text={item.text}/>;
+                    })
+                  }
+                </View>
+
+                {/*分割线*/}
+                <View style={styles.alMarginTop20}>
+                  <ALDivider/>
+                </View>
+
+                <View>
+                  {/*tab标题栏*/}
+                  <View style={{width: ScreenUtils.getScreenWidth(), height: ScreenUtils.getScreenHeight()}}>
+                    <ALTabs
+                      tabs={tabs}
+                      useSceneMap={false}
+                      tabBarStyle={localStyle.tabBarStyle}
+                      labelStyle={{fontSize: 18}}
+                      borderStyle={{backgroundColor: '#00000000'}}/>
+                  </View>
+                </View>
               </View>
-            </View>
 
 
-          </ScrollView>
+            </ScrollView>
+          </View>
       );
     }
 
@@ -262,7 +271,7 @@ class UserPage extends React.Component {
   // 生命周期函数
   //组件已挂载
   componentDidMount() {
-    this.getMockData();
+
 
   }
 
@@ -271,25 +280,8 @@ class UserPage extends React.Component {
 
   }
 
-  getMockData = () => {
-    let url = React.mockPath + '/user.json';
 
-    request({
-      url: url,
-      method: 'GET',
-      data: {},
-    }).then(res => {
-      console.log(res.data);
-      this.setState({
-        userInfo: res.data.data,
-      });
 
-      this.props.updateUserInfo(res.data.data);
-
-    }).catch(err => {
-      console.log(err);
-    });
-  };
 
 
 }
@@ -317,6 +309,7 @@ const localStyle = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     isLogin: state.isLogin,
+    userInfo: state.userInfo,
     name: state.name,
   };
 };
