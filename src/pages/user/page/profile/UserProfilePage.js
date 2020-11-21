@@ -9,7 +9,7 @@ import RouteConst from '../../../../router/RouteConst';
 import {ALImage, ALPlaceView} from '../../../../components/al-components/ALComponent';
 import ScreenUtils from '../../../../utils/ScreenUtils';
 import styles from '../../../../style/styles';
-import Actions from '../../../../store/actions';
+import ActionTypes from '../../../../store/action-types';
 import connect from 'react-redux/lib/connect/connect';
 import Flex from '@ant-design/react-native/es/flex';
 
@@ -318,7 +318,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateUserInfo(data) {
       let action = {
-        type: Actions.UPDATE_USERINFO,
+        type: ActionTypes.UPDATE_USERINFO,
         value: data,
       };
       dispatch(action);

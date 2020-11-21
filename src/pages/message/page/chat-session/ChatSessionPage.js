@@ -8,7 +8,7 @@ import styles from '../../../../style/styles';
 import {ALImage} from '../../../../components/al-components/ALComponent';
 import ALText from '../../../../components/al-components/al-text/ALText';
 import connect from 'react-redux/lib/connect/connect';
-import Actions from '../../../../store/actions';
+import ActionTypes from '../../../../store/action-types';
 
 class ChatSessionPage extends React.Component {
 
@@ -150,7 +150,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateUserInfo(data) {
       let action = {
-        type: Actions.UPDATE_USERINFO,
+        type: ActionTypes.UPDATE_USERINFO,
         value: data,
       };
       dispatch(action);

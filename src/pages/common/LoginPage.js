@@ -5,7 +5,9 @@ import LinearGradient from "react-native-linear-gradient";
 import {ALDivider, ALInput} from '../../components/al-components/ALComponent';
 import RouteConst from '../../router/RouteConst';
 import {connect} from 'react-redux';
-import Actions from '../../store/actions';
+import ActionTypes from '../../store/action-types';
+import {HttpRequest} from '../../utils/network/AxiosRequest';
+import {ApiConst} from '../../utils/network/ApiConst';
 
 class LoginPage extends React.Component {
 
@@ -183,13 +185,39 @@ class LoginPage extends React.Component {
   login = () => {
     console.log(this.state.username);
     console.log(this.state.password);
-    if (this.state.username === '1' && this.state.password === '1'){
-      this.props.updateLoginState(true);
-      this.props.navigation.navigate(RouteConst.app.APP_CONTAINER);
-    }else {
-      console.log("帐号密码错误");
-      ToastAndroid.show("帐号密码错误")
-    }
+
+    HttpRequest.post({
+      url: ApiConst.sso.POST_LOGIN,
+      data: {
+        username: this.state.username,
+        password: this.state.password,
+      }
+    }).then(res => {
+        if (res.err === null){
+          this.getUserInfoByToken(res.data.token);
+          this.props.updateUserToken(res.data.token);
+          console.log("token", res.data.token);
+        }else {
+          console.log("帐号密码错误");
+          ToastAndroid.show("帐号密码错误", ToastAndroid.SHORT);
+        }
+    })
+  }
+
+  getUserInfoByToken = (token) => {
+    HttpRequest.get({
+      url: ApiConst.sso.GET_USER_BY_TOKEN + token,
+    }).then(res => {
+      if (res.err === null){
+        this.props.updateLoginState(true);
+        this.props.updateUserInfo(res.data.data);
+        this.props.navigation.navigate(RouteConst.app.APP_CONTAINER);
+        ToastAndroid.show("登录成功", ToastAndroid.SHORT);
+      }else {
+        console.log("帐号密码错误");
+        ToastAndroid.show("帐号密码错误", ToastAndroid.SHORT);
+      }
+    })
   }
 
 
@@ -205,7 +233,7 @@ const localStyle = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     isLogin: state.isLogin,
-    name: state.name
+    userInfo: state.userInfo
   }
 }
 
@@ -213,7 +241,21 @@ const mapDispatchToProps = (dispatch) => {
   return {
     updateLoginState(data){
       let action = {
-        type: Actions.UPDATE_LOGIN_STATE,
+        type: ActionTypes.UPDATE_LOGIN_STATE,
+        value: data
+      }
+      dispatch(action);
+    },
+    updateUserInfo(data){
+      let action = {
+        type: ActionTypes.UPDATE_USERINFO,
+        value: data
+      }
+      dispatch(action);
+    },
+    updateUserToken(data){
+      let action = {
+        type: ActionTypes.UPDATE_USER_TOKEN,
         value: data
       }
       dispatch(action);

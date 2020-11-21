@@ -1,17 +1,17 @@
 import React from 'react';
-import {View, Dimensions, StyleSheet, ScrollView, Text, FlatList} from 'react-native';
+import {View, Dimensions, StyleSheet, ScrollView} from 'react-native';
 import ALTabs from '../../components/al-components/al-tabs/ALTabs';
 import IndexPage from './page/IndexPage';
 import NewestPage from './page/NewestPage';
 import FollowPage from './page/FollowPage';
-import ScreenUtils from '../../utils/ScreenUtils';
-import {ALImage, ALPlaceView, ALTapView} from '../../components/al-components/ALComponent';
-import {Carousel, Flex, WingBlank} from '@ant-design/react-native';
-import {request} from '../../utils/network/AxiosRequest';
-import styles from '../../style/styles';
+import {ALPlaceView} from '../../components/al-components/ALComponent';
+import {Flex} from '@ant-design/react-native';
+import {HttpRequest} from '../../utils/network/AxiosRequest';
 import IconTextBox from '../../components/common/icon-text-box/IconTextBox';
 import RouteConst from '../../router/RouteConst';
 import connect from 'react-redux/lib/connect/connect';
+import {ApiConst} from '../../utils/network/ApiConst';
+import ShowCarousel from './component/carousel/ShowCarousel';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -38,28 +38,24 @@ class HomePage extends React.Component {
 
   // 渲染函数
   render() {
-    const state = this.state;
+    const {workList, carouselList} = this.state;
     const tabs = [
       {
         key: 'index',
-        title: '首页推荐',
-        scene: <IndexPage {...this.props} workList={this.state.workList} enableScroll={this.state.enableSubScroll}/>,
+        title: '推荐',
+        scene: <IndexPage {...this.props} workList={workList} enableScroll={this.state.enableSubScroll}/>,
       },
       {
         key: 'newest',
         title: '最新',
-        scene: <NewestPage {...this.props} workList={this.state.workList}/>,
+        scene: <NewestPage {...this.props} workList={workList}/>,
       },
       {
         key: 'follow',
         title: '关注',
-        scene: <FollowPage {...this.props} workList={this.state.workList}/>,
+        scene: <FollowPage {...this.props} workList={workList}/>,
       },
     ];
-
-    const {workList} = this.state;
-    const carouselList = workList.length > 0 ? workList.slice(0, 3) : [];
-
     const iconTextBoxList = [
       {
         icon: require('../../assets/icon/icon1/layer.png'),
@@ -84,73 +80,61 @@ class HomePage extends React.Component {
     ];
 
     return (
-            <ScrollView nestedScrollEnabled={true}
-                        stickyHeaderIndices={[2]}
-                        onScroll={this.onScroll}
-                        showsVerticalScrollIndicator={false}
-                        style={{
-                          backgroundColor: '#fff',
-                          paddingTop: 30,
-                        }}>
+      <ScrollView nestedScrollEnabled={true}
+                  stickyHeaderIndices={[2]}
+                  onScroll={this.onScroll}
+                  showsVerticalScrollIndicator={false}
+                  style={{
+                    backgroundColor: '#fff',
+                    paddingTop: 30,
+                  }}>
 
-              {/*轮播图*/}
-              <View style={{paddingLeft: 20, paddingRight: 20}}>
-                <Carousel autoplay infinite
-                          style={{
-                            height: 180,
-                            backgroundColor: '#00000000',
-                          }}>
-                  {
-                    carouselList.map((item, index) => {
-                      return (
-                        <ALImage key={index} src={item.poster}
-                                 radius={20}
-                                 width={ScreenUtils.getScreenWidth() - 40}
-                                 height={180}/>
-                      );
-                    })
-                  }
-                </Carousel>
-              </View>
+        {/*轮播图*/}
+        <ShowCarousel carouselList={carouselList ?? []} />
 
-              {/*iconTextBoxList*/}
-              <Flex>
-                {
-                  iconTextBoxList.map((item, index) => {
-                    return (
-                      <IconTextBox key={index}
-                                   text={item.text}
-                                   icon={item.icon}
-                                   onPress={() => {
-                                     this.props.navigation.navigate(item.route);
-                                   }}/>
-                    );
-                  })
-                }
+        {/*iconTextBoxList*/}
+        <View>
+          <Flex>
+            {
+              iconTextBoxList.map((item, index) => {
+                return (
+                  <IconTextBox key={index}
+                               text={item.text}
+                               icon={item.icon}
+                               onPress={() => {
+                                 this.props.navigation.navigate(item.route);
+                               }}/>
+                );
+              })
+            }
 
-              </Flex>
-
-              <View>
-                <ALPlaceView height={10} style={{backgroundColor: '#fff'}}/>
-
-                {/*Tabs*/}
-                <View style={{width: screenWidth, height: screenHeight}}>
-                  <ALTabs
-                    tabs={tabs}
-                    useSceneMap={false}
-                    tabBarStyle={localStyle.tabBarStyle}/>
-                </View>
-              </View>
+          </Flex>
+          <ALPlaceView height={10} style={{backgroundColor: '#f8f8f8'}}/>
+        </View>
 
 
-            </ScrollView>
+        {/*Tabs*/}
+        <View style={{width: screenWidth, height: screenHeight}}>
+          <ALTabs
+            tabs={tabs}
+            useSceneMap={false}
+            tabBarStyle={localStyle.tabBarStyle}
+            labelStyle={{fontSize: 18}}
+            borderStyle={{backgroundColor: '#00000000'}}/>
+        </View>
+
+        <ALPlaceView height={300} />
+
+
+      </ScrollView>
     );
   }
 
   // 生命周期函数
   //组件已挂载
   componentDidMount() {
-    this.getMockData();
+    this.getUIWorkData();
+    this.getCarouselList();
   }
 
   //组件将要卸载时
@@ -159,23 +143,25 @@ class HomePage extends React.Component {
   }
 
   // 请求作品列表数据
-  getMockData = () => {
-    // let url = React.mockPath + '/home_work_list.json';
-    let url = 'https://gitee.com/AlanLee97/dev-mock/raw/master/project/uuid-react-native-app/work/ui-work-list.json';
-
-    request({
-      url: url,
-      method: 'GET',
-      data: {},
-    }).then(res => {
-      // console.log(res.data.data);
-      this.setState({
-        workList: res.data.data.list,
+  getUIWorkData = (data={}) => {
+    HttpRequest.get({url: ApiConst.work.ui.GET_WORK_UI_ALL, data, log: true})
+      .then(res => {
+        let {workList} = this.state;
+        workList = [...workList, ...res.data.data.list];
+        this.setState({
+          workList: workList
+        });
       });
-      // console.log(this.state.workList);
-    }).catch(err => {
-      console.log(err);
-    });
+  };
+
+  // 请求轮播图列表数据
+  getCarouselList = () => {
+    HttpRequest.get({url: ApiConst.carousel.GET_CAROUSEL_ALL})
+      .then(res => {
+        this.setState({
+          carouselList: res.data.data,
+        });
+      });
   };
 
 }
@@ -190,7 +176,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     // updateScrollY(data) {
     //   let action = {
-    //     type: Actions.UPDATE_SCROLL_Y,
+    //     type: ActionTypes.UPDATE_SCROLL_Y,
     //     value: data,
     //   };
     //   dispatch(action);
@@ -204,6 +190,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
 
 const localStyle = StyleSheet.create({
   tabBarStyle: {
+    width: 200,
     backgroundColor: '#00000000',
   },
 });

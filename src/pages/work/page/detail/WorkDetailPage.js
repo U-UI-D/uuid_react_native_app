@@ -1,19 +1,18 @@
 import React from 'react';
 import {View, Text, ScrollView} from 'react-native';
-import styles from '../../../style/styles';
-import ALWrapView from '../../../components/al-components/al-wrap-view/ALWrapView';
-import ALPlaceView from '../../../components/al-components/al-place-view/ALPlaceView';
-import AvatarNickname from '../../../components/common/avatar-nickname/AvatarNickname';
-import {request} from '../../../utils/network/AxiosRequest';
-import {ALDivider, ALImage} from '../../../components/al-components/ALComponent';
-import ALPageContainer from '../../../components/al-components/al-page-container/ALPageContainer';
+import styles from '../../../../style/styles';
+import ALPlaceView from '../../../../components/al-components/al-place-view/ALPlaceView';
+import {HttpRequest} from '../../../../utils/network/AxiosRequest';
+import {ALDivider, ALImage} from '../../../../components/al-components/ALComponent';
+import ALPageContainer from '../../../../components/al-components/al-page-container/ALPageContainer';
 import {Flex, WhiteSpace, WingBlank} from '@ant-design/react-native';
-import ScreenUtils from '../../../utils/ScreenUtils';
-import ALText from '../../../components/al-components/al-text/ALText';
+import ScreenUtils from '../../../../utils/ScreenUtils';
+import ALText from '../../../../components/al-components/al-text/ALText';
 import {Button, Icon} from 'beeshell';
-import ALTapView from '../../../components/al-components/al-tap-view/ALTapView';
-import RouteConst from '../../../router/RouteConst';
-import ALLoading from '../../../components/al-components/al-loading/ALLoading';
+import ALTapView from '../../../../components/al-components/al-tap-view/ALTapView';
+import RouteConst from '../../../../router/RouteConst';
+import ALLoading from '../../../../components/al-components/al-loading/ALLoading';
+import {ApiConst} from '../../../../utils/network/ApiConst';
 
 //作品详情页
 class WorkDetailPage extends React.Component {
@@ -30,43 +29,43 @@ class WorkDetailPage extends React.Component {
 
       otherWorkData: [
         {
-          url: require('../../../assets/image/user/poster1.png'),
+          url: require('../../../../assets/image/user/poster1.png'),
           title: 'UI中国手机客户端原创设计',
           like: 12,
           comment: 32,
         },
         {
-          url: require('../../../assets/image/user/poster2.png'),
+          url: require('../../../../assets/image/user/poster2.png'),
           title: '「汉学」文学工具产品的视觉与体验碰撞',
           like: 43,
           comment: 2432,
         },
         {
-          url: require('../../../assets/image/user/poster3.png'),
+          url: require('../../../../assets/image/user/poster3.png'),
           title: '【顷刻】_视听解说APP',
           like: 123,
           comment: 5452,
         },
         {
-          url: require('../../../assets/image/user/poster4.png'),
+          url: require('../../../../assets/image/user/poster4.png'),
           title: '拼多多APP REDESIGN',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../../assets/image/user/poster5.png'),
+          url: require('../../../../assets/image/user/poster5.png'),
           title: 'Redesign《在外》APP ',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../../assets/image/user/poster6.png'),
+          url: require('../../../../assets/image/user/poster6.png'),
           title: '植物类社交APP概念设计',
           like: 123,
           comment: 362,
         },
         {
-          url: require('../../../assets/image/user/poster7.png'),
+          url: require('../../../../assets/image/user/poster7.png'),
           title: '优灵APP改版 - 帮助你发现优秀产品和设计灵感',
           like: 123,
           comment: 362,
@@ -101,16 +100,15 @@ class WorkDetailPage extends React.Component {
           flex: 1,
         }}>
 
-          <ALPageContainer paddingTop={0} onScroll={this.onScroll}>
-
-            {/*顶部封面*/}
-            <View>
-              <ALImage src={workData.poster}/>
-            </View>
+          <ALPageContainer backgroundColor={"#00000000"}
+                           onScroll={this.onScroll}
+                           style={{
+                             zIndex: 10
+                           }}>
+            <ALPlaceView height={300} />
 
             {/*作品详情*/}
             <View style={[localStyle.detailBox]}>
-
               <WingBlank>
                 <View>
 
@@ -171,15 +169,15 @@ class WorkDetailPage extends React.Component {
                   <Flex justify="between">
                     <Flex>
                       <Flex style={{width: 60}}>
-                        <Icon source={require('../../../assets/icon/icon1/look.png')} size={13} tintColor={"#cdcdcd"} />
+                        <Icon source={require('../../../../assets/icon/icon1/look.png')} size={13} tintColor={"#cdcdcd"} />
                         <Text style={localStyle.iconCountText}>{workData.lookCount}</Text>
                       </Flex>
                       <Flex style={{width: 60}}>
-                        <Icon source={require('../../../assets/icon/icon1/like.png')} size={16} tintColor={"#cdcdcd"} />
+                        <Icon source={require('../../../../assets/icon/icon1/like.png')} size={16} tintColor={"#cdcdcd"} />
                         <Text style={localStyle.iconCountText}>{workData.likeCount}</Text>
                       </Flex>
                       <Flex style={{width: 60}}>
-                        <Icon source={require('../../../assets/icon/icon1/comment.png')} size={16} tintColor={"#cdcdcd"} />
+                        <Icon source={require('../../../../assets/icon/icon1/comment.png')} size={16} tintColor={"#cdcdcd"} />
                         <Text style={localStyle.iconCountText}>{workData.commentCount}</Text>
                       </Flex>
                     </Flex>
@@ -241,14 +239,24 @@ class WorkDetailPage extends React.Component {
 
           </ALPageContainer>
 
+          {/*顶部封面*/}
+          <View style={{
+            position: "absolute",
+            top: 0,
+            zIndex: 1,
+            width: ScreenUtils.getScreenWidth(),
+          }}>
+            <ALImage height={300} src={workData.poster}/>
+          </View>
+
           {/*固定在顶部的导航栏*/}
           <Flex justify="between" style={[
             localStyle.topBar,
             {
-              backgroundColor: this.state.offsetTop > 100 ? '#fff' : '#00000000',
+              backgroundColor: this.state.offsetTop > 100 ? `rgba(255,255,255, ${0.005 * this.state.offsetTop})` : '#00000000',
             },
           ]}>
-            <Text style={{color: this.state.offsetTop > 100 ? '#000' : '#fff'}}
+            <Text style={{color: this.state.offsetTop > 100 ? `rgba(0,0,0, ${0.005 * this.state.offsetTop})` : '#fff'}}
                   onPress={() => {
                     this.props.navigation.goBack();
                   }}>
@@ -258,11 +266,11 @@ class WorkDetailPage extends React.Component {
               this.state.offsetTop > 100 ?
                 <ALText type={'title'}
                         hNum={3}
-                        style={{color: this.state.offsetTop > 100 ? '#000' : '#fff'}}>
+                        style={{color: this.state.offsetTop > 100 ? `rgba(0,0,0, ${0.005 * this.state.offsetTop})` : '#fff'}}>
                   {workData.title}
                 </ALText> : null
             }
-            <Text style={{color: this.state.offsetTop > 100 ? '#000' : '#fff'}}
+            <Text style={{color: this.state.offsetTop > 100 ? `rgba(0,0,0, ${0.005 * this.state.offsetTop})` : '#fff'}}
                   onPress={() => {
                     this.props.navigation.goBack();
                   }}>
@@ -279,19 +287,19 @@ class WorkDetailPage extends React.Component {
                   favored: !this.state.favored,
                 });
               }}>
-                <Icon source={require('../../../assets/icon/icon1/love.png')}
+                <Icon source={require('../../../../assets/icon/icon1/love.png')}
                       tintColor={this.state.favored ? '#2a95ff' : '#666'} size={39}/>
               </ALTapView>
             </View>
 
             {/*评论*/}
             <View>
-              <Icon source={require('../../../assets/icon/icon1/message.png')} tintColor={'#666'} size={30}/>
+              <Icon source={require('../../../../assets/icon/icon1/message.png')} tintColor={'#666'} size={30}/>
             </View>
 
             {/*分享*/}
             <View>
-              <Icon source={require('../../../assets/icon/icon1/share.png')} tintColor={'#666'} size={34}/>
+              <Icon source={require('../../../../assets/icon/icon1/share.png')} tintColor={'#666'} size={34}/>
             </View>
 
             <Button type={this.state.liked ? 'info' : 'default'}
@@ -301,7 +309,7 @@ class WorkDetailPage extends React.Component {
                       this.setState({liked: !this.state.liked});
                     }}>
               <Flex align="center" style={{width: 50}}>
-                <Icon source={require('../../../assets/icon/icon1/like.png')}
+                <Icon source={require('../../../../assets/icon/icon1/like.png')}
                       size={18} tintColor={this.state.liked ? '#fff' : '#ccc'}/>
                 <ALPlaceView width={10}/>
                 <ALText style={{fontSize: 12}} color={this.state.liked ? "#fff" : "#ccc"}>点赞</ALText>
@@ -330,16 +338,12 @@ class WorkDetailPage extends React.Component {
   }
 
   getWorkData = () => {
-    request({
-      url: `https://gitee.com/AlanLee97/dev-mock/raw/master/project/uuid-react-native-app/work/detail/ui-work-detail-id-${this.props.route.params.workData.id}.json`,
-      method: 'GET',
-      data: {},
+    HttpRequest.get({
+      url: ApiConst.work.ui.GET_WORK_UI_BY_ID + this.props.route.params.workData.id,
+      log: true
     }).then(res => {
-      // console.log(res.data.data);
       this.setState({workData: res.data.data});
-    }).catch(err => {
-      console.log(err);
-    });
+    })
   };
 
 }
@@ -350,7 +354,7 @@ export default WorkDetailPage;
 // 样式
 const localStyle = {
   detailBox: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     paddingTop: 20,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
