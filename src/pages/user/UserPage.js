@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, ScrollView, StyleSheet, Dimensions} from 'react-native';
+import {View, ScrollView, StyleSheet, Dimensions, PermissionsAndroid} from 'react-native';
 import styles from '../../style/styles';
 import CountBox from './component/CountBox';
 import ALDivider from '../../components/al-components/al-divider/ALDivider';
-import {Button, Flex, WhiteSpace, WingBlank} from '@ant-design/react-native';
+import {Button, Flex, ImagePicker, WhiteSpace, WingBlank} from '@ant-design/react-native';
 import RouteConst from '../../router/RouteConst';
 import {connect} from 'react-redux';
 import {ALImage, ALPlaceView, ALTapView} from '../../components/al-components/ALComponent';
@@ -11,9 +11,13 @@ import ScreenUtils from '../../utils/ScreenUtils';
 import ALText from '../../components/al-components/al-text/ALText';
 import {Icon} from 'beeshell';
 import ALTabs from '../../components/al-components/al-tabs/ALTabs';
-import SwipeTab1 from './component/SwipeTab1';
-import SwipeTab2 from './component/SwipeTab2';
+import WorkTab from './component/WorkTab';
+import FavorTab from './component/FavorTab';
 import ALLoading from '../../components/al-components/al-loading/ALLoading';
+import {HttpRequest} from '../../utils/network/AxiosRequest';
+import {ApiConst} from '../../utils/network/ApiConst';
+import LikeTab from './component/LikeTab';
+import CameraRoll from '@react-native-community/cameraroll';
 
 let screenWidth = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
@@ -25,24 +29,7 @@ class UserPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      countData: [
-        {
-          count: 32,
-          text: '作品',
-        },
-        {
-          count: 58,
-          text: '关注',
-        },
-        {
-          count: 8560,
-          text: '粉丝',
-        },
-        {
-          count: 233,
-          text: '热力值',
-        },
-      ],
+      countData: [],
       iconTextData: [
         {
           icon: require('../../assets/icon/icon1/favor.png'),
@@ -57,76 +44,19 @@ class UserPage extends React.Component {
           text: '点赞',
         },
       ],
-      workData: [
-        {
-          url: require('../../assets/image/user/poster1.png'),
-          title: 'UI中国手机客户端原创设计',
-          like: 12,
-          comment: 32,
-        },
-        {
-          url: require('../../assets/image/user/poster2.png'),
-          title: '「汉学」文学工具产品的视觉与体验碰撞',
-          like: 43,
-          comment: 2432,
-        },
-        {
-          url: require('../../assets/image/user/poster3.png'),
-          title: '【顷刻】_视听解说APP',
-          like: 123,
-          comment: 5452,
-        },
-        {
-          url: require('../../assets/image/user/poster4.png'),
-          title: '拼多多APP REDESIGN',
-          like: 123,
-          comment: 362,
-        },
-        {
-          url: require('../../assets/image/user/poster5.png'),
-          title: 'Redesign《在外》APP ',
-          like: 123,
-          comment: 362,
-        },
-        {
-          url: require('../../assets/image/user/poster6.png'),
-          title: '植物类社交APP概念设计',
-          like: 123,
-          comment: 362,
-        },
-        {
-          url: require('../../assets/image/user/poster7.png'),
-          title: '优灵APP改版 - 帮助你发现优秀产品和设计灵感',
-          like: 123,
-          comment: 362,
-        },
-        {
-          url: require('../../assets/image/user/poster8.png'),
-          title: '晓知新闻APP',
-          like: 123,
-          comment: 362,
-        },
-        {
-          url: require('../../assets/image/user/poster9.png'),
-          title: '微信Redesign（重设计）',
-          like: 123,
-          comment: 362,
-        },
-        {
-          url: require('../../assets/image/user/poster10.png'),
-          title: '生活家 - APP视觉设计',
-          like: 123,
-          comment: 362,
-        },
-      ],
       enableSubScroll: false,
-      scrollY: 0
+      scrollY: 0,
+      uiWorkList: [],
+      workCount: 0,
+      followCount: 0,
+      fansCount: 0,
+      photos: []
     };
   }
 
   onScroll = (event) => {
     let {x, y} = event.nativeEvent.contentOffset;
-    console.log(y);
+    // console.log(y);
     this.setState({
       enableSubScroll: Math.floor(y) > 435,
       scrollY: y,
@@ -151,9 +81,9 @@ class UserPage extends React.Component {
     );
 
     const tabs = [
-      {key: 'tab1', title: '作品', scene: <SwipeTab1 {...this.props} enableScroll={this.state.enableSubScroll}/>},
-      {key: 'tab2', title: '收藏', scene: <SwipeTab2 {...this.props} />},
-      {key: 'tab3', title: '点赞', scene: <SwipeTab2 {...this.props} />},
+      {key: 'WorkTab', title: '作品', scene: <WorkTab {...this.props} enableScroll={this.state.enableSubScroll}/>},
+      {key: 'FavorTab', title: '收藏', scene: <FavorTab {...this.props} />},
+      {key: 'LikeTab', title: '点赞', scene: <LikeTab {...this.props} />},
     ];
 
 
@@ -165,6 +95,8 @@ class UserPage extends React.Component {
           <ALLoading/>
           :
           <View style={{backgroundColor: "#fff"}}>
+
+            {/*背景图片*/}
             <View style={{
               position: "absolute",
               top: 0,
@@ -175,6 +107,7 @@ class UserPage extends React.Component {
 
             <ScrollView stickyHeaderIndices={[6]}
                         onScroll={this.onScroll}
+                        showsVerticalScrollIndicator={false}
                         style={{
                           backgroundColor: '#00000000',
                           position: 'relative',
@@ -187,12 +120,9 @@ class UserPage extends React.Component {
 
               <View style={{position: 'absolute', top: 16, width: ScreenUtils.getScreenWidth()}}>
                 <Flex style={[styles.alPadding20]} justify="flex-end">
-                  <ALTapView onPress={() => {
-                    this.props.navigation.navigate(RouteConst.user.USER_SETTING_PAGE);
-                  }}>
-                    <Icon source={require('../../assets/icon/icon1/image.png')}
-                          size={28} tintColor={"#fff"}/>
-                  </ALTapView>
+
+
+                  <Icon source={require('../../assets/icon/icon1/image.png')} size={28} tintColor={"#fff"}/>
 
                   <ALPlaceView width={20} />
 
@@ -208,6 +138,8 @@ class UserPage extends React.Component {
 
 
               <View style={{backgroundColor: "#fff"}}>
+
+                {/*用户头像、昵称*/}
                 <WingBlank>
                   <View>
                     <Flex style={styles.alPaddingTB20}>
@@ -234,9 +166,15 @@ class UserPage extends React.Component {
                 <View style={[localStyle.countBoxStyle]}>
                   {
                     countData.map((item, index) => {
-                      return <CountBox key={item.text}
-                                       count={item.count}
-                                       text={item.text}/>;
+                      return (
+                        <ALTapView style={{flex: 1}} key={index} onPress={() => {
+                          if (item.route){
+                            this.props.navigation.push(item.route, {userId: this.props.userInfo.id})
+                          }
+                        }}>
+                          <CountBox count={item.count} text={item.text}/>
+                        </ALTapView>
+                      );
                     })
                   }
                 </View>
@@ -270,8 +208,16 @@ class UserPage extends React.Component {
 
   // 生命周期函数
   //组件已挂载
-  componentDidMount() {
+  async componentDidMount() {
 
+    const {isLogin} = this.props;
+    if (isLogin){
+      this.getUIWorkListByUserId(this.props.userInfo.id);
+      this.setCountData();
+      this.getCountDataByUserId();
+    }
+
+    await this.requestReadExteralStorage();
 
   }
 
@@ -280,11 +226,84 @@ class UserPage extends React.Component {
 
   }
 
+  getUIWorkListByUserId = (userId) => {
+    HttpRequest.get({
+      url: ApiConst.work.ui.GET_WORK_UI_BY_USER_ID + userId
+    }).then(res => {
+      // console.log("getUIWorkListByUserId", res);
+      this.setState({
+        uiWorkList: res.data.data.list
+      });
+    })
+  }
 
+  getCountDataByUserId = (userId=this.props.userInfo.id) => {
+    HttpRequest.get({
+      url: 'http://192.168.43.83:9001/userdata/count/uid/' + userId,
+    }).then(res => {
 
+      console.log(res);
+      this.setState({
+        workCount: res.data.data.workCount,
+        followCount: res.data.data.followCount,
+        fansCount: res.data.data.fansCount,
+      }, () => {
+        this.setCountData();
+      });
+    })
+  }
 
+  setCountData = () => {
+    const {workCount, followCount, fansCount} = this.state;
+    let countData = [
+      {
+        count: workCount,
+        text: '作品',
+      },
+      {
+        count: followCount,
+        text: '关注',
+        route: RouteConst.user.FOLLOW_PAGE
+      },
+      {
+        count: fansCount,
+        text: '粉丝',
+        route: RouteConst.user.FANS_PAGE
+      },
+      {
+        count: 233,
+        text: '热力值',
+      },
+    ];
+
+    this.setState({countData});
+
+  }
+
+  async requestReadExteralStorage() {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+          {
+            'title': 'Permission To Load Photos From External Storage',
+            'message': 'Permissions have to be granted in order to list photos on your phones for you to choose.'
+          }
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+        } else {
+          console.log("READ_EXTERNAL_STORAGE permission denied!")
+        }
+      } catch (err) {
+        console.warn(err)
+      }
+    }
+  }
 
 }
+
 
 const localStyle = StyleSheet.create({
 
@@ -310,7 +329,6 @@ const mapStateToProps = (state) => {
   return {
     isLogin: state.isLogin,
     userInfo: state.userInfo,
-    name: state.name,
   };
 };
 

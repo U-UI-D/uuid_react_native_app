@@ -47,19 +47,25 @@ class ALImage extends React.Component {
         },
         err => {
           console.log('net image err', err);
+          this.setState({
+            src: require("../../../assets/icon/icon1/image.png")
+          });
         });
     }
   }
 
   // 渲染函数
   render() {
-    let {src, width, height, vw, vh} = this.state;
+    let {src, width, height, vw, vh, defaultSrc} = this.state;
     const props = this.props;
     let iw = vw;
     let ih = Math.floor(vw / width * height);
 
     return (
-      <View  onLayout={this.onLayout}>
+      <View  onLayout={this.onLayout} style={{
+        padding: props.padding,
+        margin: props.margin,
+      }}>
         <Image source={src}
                resizeMode={props.fit}
                style={{
@@ -95,6 +101,10 @@ ALImage.propTypes = {
     PropTypes.number.isRequired,
     PropTypes.string.isRequired,
   ]),
+  defaultSrc: PropTypes.oneOfType([
+    PropTypes.number.isRequired,
+    PropTypes.string.isRequired,
+  ]),
   width: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
@@ -107,6 +117,8 @@ ALImage.propTypes = {
   round: PropTypes.bool,
   radius: PropTypes.number,
   size: PropTypes.number,
+  padding: PropTypes.number,
+  margin: PropTypes.number,
   style: PropTypes.object,
   className: PropTypes.string,
   onPress: PropTypes.func,
@@ -118,6 +130,7 @@ ALImage.defaultProps = {
   round: false,
   style: {},
   onPress: null,
+  defaultSrc: require("../../../assets/icon/icon1/image.png")
 };
 
 export default ALImage;

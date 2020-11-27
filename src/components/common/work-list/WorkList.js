@@ -26,38 +26,18 @@ class WorkList extends React.Component{
       wallpaperList: [],
       pageNum: 1,
       hasNextPage: false,
+      random1: 0,
+      random2: 0,
+      random3: 0,
     };
   }
 
   // 渲染函数
   render() {
     const props = this.props;
-    const {refreshing, workList} = this.state;
+    const {refreshing, workList, random1, random2, random3} = this.state;
 
 
-    /*   const iconList = [
-         {
-           id: 1,
-           url: require('../../assets/image/other/avatar/icon1.png'),
-           title: '',
-         },
-         {
-           id: 2,
-           url: require('../../assets/image/other/avatar/icon2.png'),
-           title: '',
-         },
-         {
-           id: 3,
-           url: require('../../assets/image/other/avatar/icon3.png'),
-           title: '',
-         },
-         {
-           id: 4,
-           url: require('../../assets/image/other/avatar/icon4.png'),
-           title: '',
-         },
-
-       ];*/
     const posterList = [
       {
         id: 1,
@@ -186,10 +166,7 @@ class WorkList extends React.Component{
         <ScrollView nestedScrollEnabled={props.enableScroll}
                     showsVerticalScrollIndicator={false}
                     onScroll={this.onScroll}
-                    refreshControl={
-                      <RefreshControl refreshing={refreshing}
-                                      onRefresh={onRefresh}/>
-                    }>
+                    >
           <ALPlaceView height={20}/>
 
           {
@@ -199,13 +176,13 @@ class WorkList extends React.Component{
                   {
                     props.showRecommend ? <View>
                       {
-                        index === Math.floor(Math.random(workList.length) * workList.length)+1 ? insertPosterList : null
+                        index === random1+1 ? insertPosterList : null
                       }
                       {
-                        index === Math.floor(Math.random(workList.length) * workList.length)+2 ? insertWallpaperList : null
+                        index === random2+1 ? insertWallpaperList : null
                       }
                       {
-                        index === Math.floor(Math.random(workList.length) * workList.length)+3 ? insertDesignerList : null
+                        index === random3+1 ? insertDesignerList : null
                       }
                     </View> : null
                   }
@@ -233,8 +210,10 @@ class WorkList extends React.Component{
   // 生命周期函数
   //组件已挂载
   componentDidMount() {
+    console.log("workList componentDidMount =============");
     this.getWallpaperData();
     this.getUIWorkData();
+
 
   }
 
@@ -275,13 +254,16 @@ class WorkList extends React.Component{
   getUIWorkData = (data={pageNum: this.state.pageNum}) => {
     HttpRequest.get({url: ApiConst.work.ui.GET_WORK_UI_ALL, data, log: true})
       .then(res => {
-        console.log(res);
+        console.log("workList getUIWorkData ==================");
         let {workList} = this.state;
         workList = [...workList, ...res.data.data.list];
         this.setState({
           workList: workList,
           pageNum: res.data.data.pageNum,
           hasNextPage: res.data.data.hasNextPage,
+          random1: Math.floor(Math.random() * workList.length),
+          random2: Math.floor(Math.random() * workList.length),
+          random3: Math.floor(Math.random() * workList.length),
         });
       });
   };
@@ -302,10 +284,9 @@ class WorkList extends React.Component{
   onScroll = (event) => {
     let {x, y} = event.nativeEvent.contentOffset;
     let contentHeight = event.nativeEvent.contentSize.height;
-    console.log('WorkList y', y);
-    console.log('WorkList contentHeight', contentHeight);
+    // console.log('WorkList y', y);
     if (Math.floor(y) >= Math.floor(contentHeight-800)){
-      console.log("load new data=============");
+      // console.log("load new data=============");
       let {pageNum, hasNextPage} = this.state;
       if (hasNextPage){
         this.getUIWorkData({pageNum: pageNum+1});

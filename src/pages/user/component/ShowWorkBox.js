@@ -23,7 +23,7 @@ class ShowWorkBox extends React.Component{
           </View>
           <Text numberOfLines={1} style={[styles.alTextH5, styles.alMarginTop10]}>{props.title}</Text>
           <Text style={[styles.alTextDesc, styles.alMarginTop10, styles.alFontSize12]}>
-            {props.like}点赞  ·  {props.comment}评论
+            {props.likeCount}点赞  ·  {props.commentCount}评论
           </Text>
 
         </View>

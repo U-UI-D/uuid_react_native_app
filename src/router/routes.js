@@ -23,6 +23,8 @@ import ShopPage from '../pages/shop/ShopPage';
 import MessagePage from '../pages/message/MessagePage';
 import ChatSessionPage from '../pages/message/page/chat-session/ChatSessionPage';
 import VisitorProfilePage from '../pages/user/page/visitor-profile/VisitorProfilePage';
+import FollowPage from '../pages/user/page/follow/FollowPage';
+import FansPage from '../pages/user/page/fans/FansPage';
 
 
 const module_user = [
@@ -89,6 +91,21 @@ const module_user = [
       header: () => null,
     }
   },
+  {
+    name: 'FollowPage',
+    component: FollowPage,
+    options: {
+      header: () => null,
+    }
+  },
+  {
+    name: 'FansPage',
+    component: FansPage,
+    options: {
+      header: () => null,
+    }
+  },
+
 ];
 
 const module_work = [

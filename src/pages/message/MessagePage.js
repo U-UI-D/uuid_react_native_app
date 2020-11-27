@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Text} from 'react-native';
 import ALPageContainer from '../../components/al-components/al-page-container/ALPageContainer';
 import ScreenUtils from '../../utils/ScreenUtils';
 import ALTabs from '../../components/al-components/al-tabs/ALTabs';
@@ -9,6 +9,7 @@ import IconTextBox from '../../components/common/icon-text-box/IconTextBox';
 import ALEmpty from '../../components/al-components/al-empty/ALEmpty';
 import ALText from '../../components/al-components/al-text/ALText';
 import RouteConst from '../../router/RouteConst';
+import styles from '../../style/styles';
 
 function MessageRow(props){
   const {data} = props;
@@ -27,7 +28,7 @@ function MessageRow(props){
 
         <ALPlaceView height={8} />
 
-        <ALText row={1} type="desc" style={{fontSize: 13}}>{data.message}</ALText>
+        <ALText row={1} type="desc" style={{fontSize: 13, color: "#ccc"}}>{data.message}</ALText>
       </Flex>
     </Flex>
   )
@@ -66,7 +67,7 @@ function NoticePage(props) {
   };
 
   return (
-    <ALPageContainer paddingTop={20}>
+    <ALPageContainer paddingTop={20} scroll={false}>
       <Flex>
         {
           iconTextList.map((item, index) => {
@@ -101,7 +102,7 @@ function ChatPage(props) {
   ];
 
   return (
-    <ALPageContainer>
+    <ALPageContainer scroll={false}>
       {
         messageList.length > 0 ?
           (
@@ -158,21 +159,18 @@ class MessagePage extends React.Component {
 
 
     return (
-      <ALPageContainer scroll={false}>
-
-        <View style={{width: ScreenUtils.getScreenWidth(), height: ScreenUtils.getScreenHeight()}}>
-          <ALTabs
-            tabs={tabs}
-            sceneMap={sceneMap}
-            tabBarStyle={localStyle.tabBarStyle}
-            labelStyle={{fontSize: 18}}
-            borderStyle={{backgroundColor: '#00000000'}}/>
-
-          <ALPlaceView height={200}/>
-
-        </View>
-
-      </ALPageContainer>
+      <View style={{
+        flex: 1,
+        paddingTop: 30,
+        backgroundColor: "#fff"
+      }}>
+        <ALTabs
+          tabs={tabs}
+          sceneMap={sceneMap}
+          tabBarStyle={localStyle.tabBarStyle}
+          labelStyle={{fontSize: 18}}
+          borderStyle={{backgroundColor: '#00000000'}}/>
+      </View>
     );
   }
 

@@ -61,8 +61,6 @@ class MaterialPage extends React.Component {
           labelStyle={{fontSize: 18}}
           borderStyle={{backgroundColor: '#00000000'}}/>
 
-        <ALPlaceView height={200}/>
-
       </ALPageContainer>
     );
   }

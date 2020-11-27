@@ -34,6 +34,10 @@ export default class RouteConst {
     USER_PROFILE_MODIFY_PASSWORD_PAGE: 'ModifyPasswordPage',
     //访客用户主页
     VISITOR_PROFILE_PAGE: 'VisitorProfilePage',
+    //粉丝列表页面
+    FANS_PAGE: 'FansPage',
+    //关注的人列表页面
+    FOLLOW_PAGE: 'FollowPage',
 
   }
 

@@ -13,6 +13,7 @@ import ALTapView from '../../../../components/al-components/al-tap-view/ALTapVie
 import RouteConst from '../../../../router/RouteConst';
 import ALLoading from '../../../../components/al-components/al-loading/ALLoading';
 import {ApiConst} from '../../../../utils/network/ApiConst';
+import {connect} from 'react-redux';
 
 //作品详情页
 class WorkDetailPage extends React.Component {
@@ -125,17 +126,21 @@ class WorkDetailPage extends React.Component {
                       </Flex>
                     </Flex>
 
-                    <Button size="sm" type={this.state.followed ? 'info' : 'default'}
-                            style={[styles.alBorderCapsule, {height: 26, width: 60, paddingLeft: 10, paddingRight: 10}]}
-                            onPress={() => {
-                              this.setState({
-                                followed: !this.state.followed
-                              })
-                            }}>
-                      {
-                        this.state.followed ? (<ALText style={{fontSize: 12}} color="#fff">已关注</ALText>) : (<ALText style={{fontSize: 12}} color="#ccc">+关注</ALText>)
-                      }
-                    </Button>
+                    {
+                      workData.userId !== this.props.userInfo.id ? (
+                        <Button size="sm" type={this.state.followed ? 'info' : 'default'}
+                                style={[styles.alBorderCapsule, {height: 26, width: 60, paddingLeft: 10, paddingRight: 10}]}
+                                onPress={() => {
+                                  this.setState({
+                                    followed: !this.state.followed
+                                  })
+                                }}>
+                          {
+                            this.state.followed ? (<ALText style={{fontSize: 12}} color="#fff">已关注</ALText>) : (<ALText style={{fontSize: 12}} color="#ccc">+关注</ALText>)
+                          }
+                        </Button>
+                      ) : null
+                    }
 
                   </Flex>
 
@@ -348,8 +353,14 @@ class WorkDetailPage extends React.Component {
 
 }
 
+const mapStateToProps = state => {
+  return {
+    userInfo: state.userInfo
+  }
+}
 
-export default WorkDetailPage;
+
+export default connect(mapStateToProps)(WorkDetailPage);
 
 // 样式
 const localStyle = {

@@ -32,7 +32,7 @@ export default class ALTabs extends PureComponent {
     const sceneMap = this.props.sceneMap;
     const props = this.props;
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, ...props.style}}>
         <TabView
           navigationState={this.state}
           renderScene={props.renderScene ?? (props.useSceneMap ? SceneMap(sceneMap) : this.switchScene)}

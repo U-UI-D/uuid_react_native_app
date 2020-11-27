@@ -33,7 +33,7 @@ class IndexPage extends React.Component {
 
   onScroll = (event) => {
     let {x, y} = event.nativeEvent.contentOffset;
-    console.log('y', y);
+    // console.log('y', y);
   };
 
 

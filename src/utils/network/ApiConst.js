@@ -17,6 +17,14 @@ export const ApiConst = {
     GET_USER_ID: '/user/user',
     //更新用户资料
     PUT_USER: '/user/user',
+    //获取用户收藏作品
+    GET_USER_DATA_FAVOR: '/user/userdata/favor-work/uid/',
+    //获取用户点赞作品
+    GET_USER_DATA_LIKE: '/user/userdata/like-work/uid/',
+    //获取用户点赞作品
+    GET_USER_DATA_FANS: '/user/userdata/fans/uid/',
+    //获取用户点赞作品
+    GET_USER_DATA_FOLLOW: '/user/userdata/follow/uid/',
     //查询用户名是否存在
     GET_CHECK_USER_EXIST: '/user/user/u/',
     //注册
@@ -36,6 +44,8 @@ export const ApiConst = {
       GET_WORK_UI_BY_ID: '/work/work/ui/',
       //添加ui作品
       POST_WORK_UI_ADD: '/work/work/ui',
+      //ui作品详情
+      GET_WORK_UI_BY_USER_ID: '/work/work/ui/user/',
     },
 
     software: {

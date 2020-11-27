@@ -23,26 +23,9 @@ class UserSettingPage extends React.Component {
   // 渲染函数
   render() {
     return (
-      <ALPageContainer>
+      <ALPageContainer showNavBar navBar={{left: "", title: "设置"}} navigation={this.props.navigation}>
         <WingBlank>
-          <Flex>
-            <Flex.Item>
-              <Flex direction="row">
-                <Icon source={require('beeshell/dist/common/images/icons/angle-left.png')} size={18} tintColor='#000'/>
-                <Text style={styles.alPaddingTB20} onPress={() => {
-                  this.props.navigation.goBack();
-                }}>返回</Text>
-              </Flex>
-            </Flex.Item>
-          </Flex>
-
-
           <View>
-            <ALText hNum={2}>设置</ALText>
-          </View>
-
-          <View>
-
             <ALListItem
               onPress={() => {
                 this.props.navigation.navigate(RouteConst.user.USER_PROFILE_PAGE);

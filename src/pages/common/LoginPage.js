@@ -194,9 +194,9 @@ class LoginPage extends React.Component {
       }
     }).then(res => {
         if (res.err === null){
-          this.getUserInfoByToken(res.data.token);
-          this.props.updateUserToken(res.data.token);
-          console.log("token", res.data.token);
+          this.getUserInfoByToken(res.data.data.token);
+          this.props.updateUserToken(res.data.data.token);
+          console.log("token", res.data.data.token);
         }else {
           console.log("帐号密码错误");
           ToastAndroid.show("帐号密码错误", ToastAndroid.SHORT);

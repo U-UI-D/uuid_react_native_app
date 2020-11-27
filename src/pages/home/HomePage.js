@@ -12,6 +12,7 @@ import RouteConst from '../../router/RouteConst';
 import connect from 'react-redux/lib/connect/connect';
 import {ApiConst} from '../../utils/network/ApiConst';
 import ShowCarousel from './component/carousel/ShowCarousel';
+import ActionTypes from '../../store/action-types';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -30,7 +31,7 @@ class HomePage extends React.Component {
 
   onScroll = (event) => {
     let {x, y} = event.nativeEvent.contentOffset;
-    console.log('y', y);
+    // console.log('y', y);
     this.setState({
       enableSubScroll: Math.floor(y) > 283,
     });
@@ -135,6 +136,10 @@ class HomePage extends React.Component {
   componentDidMount() {
     this.getUIWorkData();
     this.getCarouselList();
+
+    // this.props.updateUserToken("");
+    // this.props.updateLoginState(false);
+    // this.props.updateUserInfo(null);
   }
 
   //组件将要卸载时
@@ -174,13 +179,27 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    // updateScrollY(data) {
-    //   let action = {
-    //     type: ActionTypes.UPDATE_SCROLL_Y,
-    //     value: data,
-    //   };
-    //   dispatch(action);
-    // },
+    updateLoginState(data) {
+      let action = {
+        type: ActionTypes.UPDATE_LOGIN_STATE,
+        value: data,
+      };
+      dispatch(action);
+    },
+    updateUserInfo(data) {
+      let action = {
+        type: ActionTypes.UPDATE_USERINFO,
+        value: data,
+      };
+      dispatch(action);
+    },
+    updateUserToken(data) {
+      let action = {
+        type: ActionTypes.UPDATE_USER_TOKEN,
+        value: data,
+      };
+      dispatch(action);
+    },
 
   };
 
