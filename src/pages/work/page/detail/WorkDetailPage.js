@@ -14,9 +14,20 @@ import RouteConst from '../../../../router/RouteConst';
 import ALLoading from '../../../../components/al-components/al-loading/ALLoading';
 import {ApiConst} from '../../../../utils/network/ApiConst';
 import {connect} from 'react-redux';
+import CommentList from './component/CommentList';
+import {CommentContext} from './component/CommentContext';
+
 
 //作品详情页
 class WorkDetailPage extends React.Component {
+
+  updateModeType = (modalType) => {
+    this.setState({modalType: modalType})
+  }
+
+  updateModalVisible = (visible) => {
+    this.setState({modalVisible: visible})
+  }
 
   //构造器
   constructor(props) {
@@ -27,6 +38,10 @@ class WorkDetailPage extends React.Component {
       favored: false,
       liked: false,
       followed: false,
+      modalVisible: false,
+      updateModalVisible: this.updateModalVisible,
+      modalType: "comment",
+      updateModeType: this.updateModeType,
 
       otherWorkData: [
         {
@@ -219,7 +234,7 @@ class WorkDetailPage extends React.Component {
               {/*其他作品*/}
               <View>
                 <WingBlank>
-                  <ALText hNum={3} style={{marginTop: 20}}>其他作品</ALText>
+                  <ALText h3 style={{marginTop: 20}}>其他作品</ALText>
                 </WingBlank>
 
                 <ScrollView horizontal
@@ -237,9 +252,20 @@ class WorkDetailPage extends React.Component {
                   <ALPlaceView width={10} />
                 </ScrollView>
               </View>
+
+              {/*评论*/}
+              <View style={styles.alMarginTB20}>
+                <WingBlank>
+                  <ALText h3 style={{marginTop: 20}}>评论</ALText>
+
+                  <CommentContext.Provider value={this.state}>
+                    <CommentList workId={workData.id} />
+                  </CommentContext.Provider>
+                </WingBlank>
+              </View>
             </View>
 
-            <ALPlaceView height={80} />
+            <ALPlaceView height={80} style={{backgroundColor: "#fff"}} />
 
 
           </ALPageContainer>
@@ -269,8 +295,7 @@ class WorkDetailPage extends React.Component {
             </Text>
             {
               this.state.offsetTop > 100 ?
-                <ALText type={'title'}
-                        hNum={3}
+                <ALText h3
                         style={{color: this.state.offsetTop > 100 ? `rgba(0,0,0, ${0.005 * this.state.offsetTop})` : '#fff'}}>
                   {workData.title}
                 </ALText> : null
@@ -299,7 +324,15 @@ class WorkDetailPage extends React.Component {
 
             {/*评论*/}
             <View>
-              <Icon source={require('../../../../assets/icon/icon1/message.png')} tintColor={'#666'} size={30}/>
+              <ALTapView onPress={() => {
+                this.setState({
+                  modalVisible: !this.state.modalVisible
+                }, () => {
+                  console.log("WorkDetailPage modalVisible", this.state.modalVisible);
+                })
+              }}>
+                <Icon source={require('../../../../assets/icon/icon1/message.png')} tintColor={'#666'} size={30}/>
+              </ALTapView>
             </View>
 
             {/*分享*/}
@@ -322,11 +355,24 @@ class WorkDetailPage extends React.Component {
             </Button>
 
           </Flex>
-
         </View>
 
     );
   }
+
+  openReplyWindow = () => {
+    console.log("openReplyWindow");
+    this.setState({modalVisible: !this.state.modalVisible})
+  }
+
+  onModalVisibleChange = () => {
+    this.setState({modalVisible: !this.state.modalVisible})
+  }
+
+  onModalTypeChange = (type) => {
+    this.setState({modalType: type})
+  }
+
 
 
   // 生命周期函数
