@@ -4,54 +4,26 @@ import PropTypes from 'prop-types';
 
 function ALText(props) {
 
-
-  const getType = (type) => {
-    switch (type) {
-      case 'title':
-        return localStyle.title;
-      case 'plain':
-        return localStyle.plain;
-      case 'desc':
-        return localStyle.desc;
-      default:
-        return null;
-    }
-  };
-
-  const getHNum = (num) => {
-    switch (num) {
-      case 1:
-        return localStyle.h1;
-      case 2:
-        return localStyle.h2;
-      case 3:
-        return localStyle.h3;
-      case 4:
-        return localStyle.h4;
-      case 5:
-        return localStyle.h5;
-      case 6:
-        return localStyle.h6;
-      default:
-        return null;
-    }
-  };
-
   return (
     <Text
       onPress={props.onPress}
       numberOfLines={props.row}{...props}
       style={[
         {
-
           textAlign: props.align,
+          ...(props.type === 'title' ? localStyle.title : (props.type === 'desc' ? localStyle.desc : localStyle.plain)),
+          ...(props.h1 ? localStyle.h1 : null),
+          ...(props.h2 ? localStyle.h2 : null),
+          ...(props.h3 ? localStyle.h3 : null),
+          ...(props.h4 ? localStyle.h4 : null),
+          ...(props.h5 ? localStyle.h5 : null),
+          ...(props.h6 ? localStyle.h6 : null),
         },
-        getType(props.type),
-        getHNum(props.hNum),
         {
-          color: props.color,
+          ...(props.color ? {color: props.color} : null),
+          ...(props.size ? {fontSize: props.size} : null),
           ...props.style,
-        },
+        }
       ]}
     >
       {props.children}
@@ -65,8 +37,13 @@ ALText.propTypes = {
   color: PropTypes.string,
   align: PropTypes.string,
   size: PropTypes.number,
-  hNum: PropTypes.number,
   row: PropTypes.number,
+  h1: PropTypes.bool,
+  h2: PropTypes.bool,
+  h3: PropTypes.bool,
+  h4: PropTypes.bool,
+  h5: PropTypes.bool,
+  h6: PropTypes.bool,
   style: PropTypes.object,
   onPress: PropTypes.func,
 };
@@ -74,8 +51,13 @@ ALText.propTypes = {
 // prop默认值
 ALText.defaultProps = {
   type: 'plain',
-  color: '#000000',
   align: 'left',
+  h1: false,
+  h2: false,
+  h3: false,
+  h4: false,
+  h5: false,
+  h6: false,
   style: {},
   onPress: null,
 };
@@ -113,6 +95,7 @@ const localStyle = StyleSheet.create({
     fontSize: 24,
   },
   plain: {
+    color: "black",
     fontSize: 16,
   },
   desc: {

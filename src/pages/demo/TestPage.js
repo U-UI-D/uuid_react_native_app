@@ -1,11 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import {connect} from 'react-redux';
-import LinearGradient from "react-native-linear-gradient";
-import {BoxShadow} from 'react-native-shadow';
-import {ALImage, ALPlaceView} from '../../components/al-components/ALComponent';
-import styles from '../../style/styles';
-
+import DateTimeUtils from '../../utils/DateTimeUtils';
 
 
 class TestPage extends React.Component {
@@ -24,70 +20,16 @@ class TestPage extends React.Component {
   // 渲染函数
   render() {
 
-    const shadowOpt = {
-      width:200,
-      height:120,
-      color:"#000",
-      border:2,
-      radius:3,
-      opacity:0.2,
-      x:0,
-      y:3,
-      style:{marginVertical:5},
-    }
+    let time = new Date(new Date().getTime() + (1000 * 60 * 60 * 8)).toISOString();
+    time = DateTimeUtils.getMobileEndFormerTimeFromISO(time);
+    console.log("time", time);
 
     return (
       <View style={localStyle.flexCenter}>
-
-        <View style={[styles.alShowBorderRed]}>
-          {/*<ALImage width={200} height={400} />*/}
-
-          <Image source={this.props.src ? this.props.src : this.state.defaultSrc}  width={200} height={400} />
-        </View>
-
-        <ALPlaceView height={40} />
-
-        <BoxShadow setting={{
-          width:200,
-          height:120,
-          color:"#eee",
-          border:20,
-          radius:10,
-          opacity:0.2,
-          x:2,
-          y:2,
-        }}>
-          <View style={{
-            width: 200,
-            height: 120,
-            padding: 10,
-            backgroundColor: "#fff",
-            borderRadius: 10,
-          }}>
-            <Text>
-              测试BoxShadow阴影
-            </Text>
-          </View>
-        </BoxShadow>
-
-        <ALPlaceView height={40} />
-
-        <View style={{
-          width: 200,
-          height: 120,
-          padding: 10,
-          margin: 4,
-          backgroundColor: "#fff",
-          borderRadius: 10,
-          elevation: 20
-        }}>
-          <Text>
-            测试elevation阴影
-          </Text>
-        </View>
-
+        <Text>
+          {time}
+        </Text>
       </View>
-
     );
   }
 

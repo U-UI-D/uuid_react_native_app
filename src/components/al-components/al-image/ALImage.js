@@ -47,9 +47,9 @@ class ALImage extends React.Component {
         },
         err => {
           console.log('net image err', err);
-          this.setState({
-            src: require("../../../assets/icon/icon1/image.png")
-          });
+          // this.setState({
+          //   src: require("../../../assets/icon/icon1/image.png")
+          // });
         });
     }
   }
