@@ -1,11 +1,12 @@
-# React Native Template
-React Native项目模板
+# UUID React Native 
+UUID移动端 React Native APP 项目
 
 ## 集成功能
-- UI：Ant Design
+- UI：Ant Design; BeeShell
 - 网络：Axios网络请求
 - 路由：React-Navigation
 - 存储：react-native-storage
+- 状态管理：React-Redux
 
 
 
@@ -40,3 +41,4 @@ yarn android
 
 ## 项目截图
 
+暂时不放图
