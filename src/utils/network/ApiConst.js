@@ -58,6 +58,21 @@ export const ApiConst = {
     },
   },
 
+  //评论接口 ============================
+  comment: {
+    comment: {
+      //通过作品id获取评论
+      GET_COMMENT_BY_WORK_ID: '/comment/comment/work/',
+      //添加评论
+      POST_COMMENT_ADD: '/comment/comment',
+    },
+
+    reply: {
+      //添加回复
+      POST_REPLY_ADD: '/comment/reply',
+    },
+  },
+
   //轮播图接口 ===========================
   carousel: {
     GET_CAROUSEL_ALL: '/common/carousel',
