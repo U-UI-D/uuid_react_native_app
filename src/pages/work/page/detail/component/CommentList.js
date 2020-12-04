@@ -11,6 +11,7 @@ import {HttpRequest} from '../../../../../utils/network/AxiosRequest';
 import DateTimeUtils from '../../../../../utils/DateTimeUtils';
 import ALLoading from '../../../../../components/al-components/al-loading/ALLoading';
 import {CommentContext} from './CommentContext';
+import {ApiConst} from '../../../../../utils/network/ApiConst';
 
 
 // 回复组件
@@ -28,7 +29,7 @@ function Reply(props) {
                 <ALText size={13}>
                   {data.nickname}:
                   <ALText size={13} onPress={() => {
-                    updateModeType("subReply");
+                    updateModeType('subReply');
                     updateModalVisible(!modalVisible);
                     props.onReplyChange(data);
                   }}>
@@ -45,11 +46,11 @@ function Reply(props) {
                           <ALText size={13} style={{marginTop: 6}}>
                             {item.nickname} 回复 {item.originUserNickname}:
                             <ALText size={13} onPress={() => {
-                              updateModeType("subReply");
+                              updateModeType('subReply');
                               updateModalVisible(!modalVisible);
                               props.onReplyChange(data);
                             }}>
-                              {" " + item.content}
+                              {' ' + item.content}
                             </ALText>
                           </ALText>
 
@@ -97,7 +98,7 @@ function Comment(props) {
               {/*评论内容*/}
               <ALText size={14} style={{marginLeft: 50, marginTop: 10}}
                       onPress={() => {
-                        updateModeType("reply");
+                        updateModeType('reply');
                         updateModalVisible(!modalVisible);
                         props.onCommentChange(data);
                       }}>
@@ -139,72 +140,74 @@ function CommentList(props) {
   const [currentReplyData, setCurrentReplyData] = useState();
   const [selfModalType, setSelfModalType] = useState();
 
+  // 获取评论数据
   const getCommentData = () => {
     HttpRequest.get({
-      url: 'http://192.168.43.83:9003/comment/work/' + props.workId,
+      url: ApiConst.comment.comment.GET_COMMENT_BY_WORK_ID + props.workId,
     }).then(res => {
       setCommentData(res.data.data);
     });
   };
+  // 添加评论
   const addCommentToBackend = (text) => {
     console.log('addCommentToBackend');
     HttpRequest.post({
-      url: "http://192.168.43.83:9003/comment",
+      url: ApiConst.comment.comment.POST_COMMENT_ADD,
       data: {
         userId: props.userInfo.id,
         workId: props.workId,
-        content: text
-      }
+        content: text,
+      },
     }).then(res => {
       getCommentData();
     });
   };
+  // 添加回复
   const addReplyToBackend = (text) => {
     console.log('addReplyToBackend');
     HttpRequest.post({
-      url: "http://192.168.43.83:9003/reply",
+      url: ApiConst.comment.reply.POST_REPLY_ADD,
       data: {
         userId: props.userInfo.id,
         commentId: currentCommentData.id,
-        content: text
-      }
+        content: text,
+      },
     }).then(res => {
-      console.log("post comment", res.data.data);
+      console.log('post comment', res.data.data);
       getCommentData();
     });
   };
-
   // 添加二级回复
   const addSubReplyToBackend = (text) => {
     console.log('addSubReplyToBackend');
     console.log('currentReplyData', currentReplyData);
     HttpRequest.post({
-      url: "http://192.168.43.83:9003/reply",
+      url: ApiConst.comment.reply.POST_REPLY_ADD,
       data: {
         userId: props.userInfo.id,
         content: text,
         mainReplyId: currentReplyData.id,
-        originUserId: currentReplyData.userId
-      }
+        originUserId: currentReplyData.userId,
+      },
     }).then(res => {
-      console.log("post comment", res.data.data);
+      console.log('post comment', res.data.data);
       getCommentData();
     });
   };
 
   // 发表评论或回复
   const addCommentOrReply = (text, callback) => {
-    if (selfModalType === "comment"){
+    if (selfModalType === 'comment') {
       addCommentToBackend(text);
     }
-    if (selfModalType === "reply"){
+    if (selfModalType === 'reply') {
       addReplyToBackend(text);
     }
-    if (selfModalType === "subReply"){
+    if (selfModalType === 'subReply') {
       addSubReplyToBackend(text);
     }
 
-    if (callback){
+    if (callback) {
       callback();
     }
   };
@@ -252,8 +255,8 @@ function CommentList(props) {
                     {/*空白地方*/}
                     <Flex.Item onPress={() => {
                       updateModalVisible(!modalVisible);
-                      updateModeType("comment");
-                      setComment("");
+                      updateModeType('comment');
+                      setComment('');
                     }}/>
                     {/*输入框区域*/}
                     <Flex style={styles.inputAreaBox}>
@@ -271,13 +274,13 @@ function CommentList(props) {
                               onPress={() => {
                                 addCommentOrReply(comment, () => {
                                   updateModalVisible(!modalVisible);
-                                  setComment("");
+                                  setComment('');
                                 });
                               }}
                       >
                         {modalType === 'comment' ? '发送' : '回复'}
                       </Button>
-                      <ALPlaceView width={10} />
+                      <ALPlaceView width={10}/>
                     </Flex>
                   </View>
                 </Modal>
